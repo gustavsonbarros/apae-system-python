@@ -1,51 +1,55 @@
-💙 Projeto APAE - Inclusão e Cuidado com Pessoas Autistas
+# 💙 Projeto APAE - Página Inicial Responsiva
 
-Este é um projeto de página inicial desenvolvida com HTML e Bootstrap 5, voltada para a divulgação dos serviços oferecidos por uma instituição que promove a inclusão social, a educação e o cuidado com pessoas autistas.
-✨ Funcionalidades
+Olá! Este repositório contém o código da página inicial desenvolvida para a APAE (Associação de Pais e Amigos dos Excepcionais), com foco especial no atendimento e inclusão de pessoas com Transtorno do Espectro Autista (TEA). O projeto foi feito com muito carinho e atenção aos detalhes, buscando oferecer uma experiência acessível e informativa.
 
-    🖼️ Carrossel Responsivo: Destaques institucionais como missão, educação especial, saúde e doações.
+## 🧠 Sobre o Projeto
 
-    📚 Seção de Cards: Apresenta os serviços oferecidos com foco em educação para autistas, saúde especializada e inclusão no mercado de trabalho.
+A proposta da página é apresentar os principais serviços oferecidos pela instituição de forma clara, responsiva e acolhedora. A estrutura inclui:
 
-    🎥 Vídeo Incorporado: Conteúdo informativo sobre o autismo diretamente do YouTube.
+- Um **carrossel com destaques institucionais** (missão, educação, saúde e doações);
+- Uma **seção de cards informativos** sobre os serviços, agora com foco adaptado para o público autista;
+- Tudo isso com uma estrutura leve, moderna e amigável.
 
-    📱 Layout Responsivo: Totalmente adaptável para dispositivos móveis e desktops.
+## 🔧 Tecnologias Utilizadas
 
-    ♿ Foco na Acessibilidade: Textos adaptados e linguagem acolhedora para pessoas com Transtorno do Espectro Autista (TEA).
+- HTML5
+- CSS3
+- [Bootstrap 5](https://getbootstrap.com/)
+- Bootstrap Icons
 
-🛠️ Tecnologias Utilizadas
 
-    HTML5
+## 📱 Responsividade
 
-    CSS3
+A página foi desenvolvida com layout responsivo, se adaptando bem a celulares, tablets e computadores. Para isso, usei as classes do Bootstrap, como `container`, `row`, `col-*`, `ratio`, entre outras.
 
-    Bootstrap 5
+## 🆕 Melhorias já realizadas
 
-    Ícones Bootstrap Icons
+- Adaptação do conteúdo para atender melhor o público autista;
+- Redução do tamanho do vídeo incorporado, para ficar mais agradável visualmente;
+- Ajustes em colunas para melhor responsividade;
+- Escrita clara e afetiva nos textos.
 
-    YouTube embed
+## ✨ Ideias para futuras melhorias
 
-📁 Estrutura
+- Seção de depoimentos reais de famílias ou pessoas atendidas;
+- Inclusão de recursos de acessibilidade como botão de alto contraste ou integração com o VLibras;
+- Rodapé com localização e redes sociais;
+- Integração com Flask para tornar o site dinâmico.
 
-    index.html: Página principal com carrossel, cards e vídeo.
+## 🙋‍♂️ Sobre mim
 
-    /static/img/: Imagens usadas nos slides e cards.
+Sou estudante de Análise e Desenvolvimento de Sistemas (ADS) e atualmente participo de um projeto de pesquisa voltado para detecção de câncer de pele utilizando técnicas de aprendizado de máquina. Além disso, atuo como estagiário na empresa SurfGuru, onde colaboro na área de análise de dados, contribuindo para transformar informações em insights valiosos.
 
-    base.html: Layout base (template do Flask, caso usado em integração futura).
+Tenho muito interesse por tecnologia, acessibilidade e projetos com impacto social, como este, voltado para inclusão de pessoas autistas. Estou sempre disposto a aprender e melhorar como desenvolvedor e ser humano.
 
-🚀 Melhorias Futuras
+## 📬 Contato
 
-    Inclusão de depoimentos reais.
+Caso queira entrar em contato comigo para conversar sobre o projeto ou sugerir algo:
 
-    Botão de acessibilidade (alto contraste, VLibras).
+📧 gustavson.adm@gmail.com  
+📱 (81) 9 9818-7646
 
-    Seção de notícias e eventos.
+---
 
-    Rodapé com informações de contato e localização.
-
-🤝 Contribuições
-
-Sinta-se à vontade para sugerir melhorias, reportar bugs ou enviar pull requests.
-🧩 Objetivo
-
-O objetivo deste projeto é promover a conscientização, o acolhimento e o apoio ao público autista, oferecendo uma interface clara, acessível e informativa.
+**Muito obrigado por visitar este repositório!**  
+Estou sempre buscando evoluir e contribuir com projetos que fazem a diferença. 💙
