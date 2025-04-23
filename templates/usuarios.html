@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Usuários - APAE</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container my-5">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h3>Lista de Usuários</h3>
+        <a href="{{ url_for('cadastro') }}" class="btn btn-light">Novo Cadastro</a>
+      </div>
+      <div class="card-body">
+
+        <!-- Filtros -->
+        <form class="mb-4">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <input type="text" name="busca" class="form-control" placeholder="Buscar por nome ou CPF" value="{{ busca or '' }}">
+            </div>
+            <div class="col-md-4">
+              <select name="situacao" class="form-control">
+                <option value="todos">Todas situações</option>
+                <option value="ativo" {% if situacao == 'ativo' %}selected{% endif %}>Ativo</option>
+                <option value="inativo" {% if situacao == 'inativo' %}selected{% endif %}>Inativo</option>
+                <option value="suspenso" {% if situacao == 'suspenso' %}selected{% endif %}>Suspenso</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Tabela de usuários -->
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Situação</th>
+                <th>Data Cadastro</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for usuario in usuarios %}
+              <tr>
+                <td>{{ usuario['nome'] }}</td>
+                <td>{{ usuario['cpf'] or 'Não informado' }}</td>
+                <td>
+                  <span class="badge bg-{{ 'success' if usuario['situacao_cadastro'] == 'ativo' else 'warning' if usuario['situacao_cadastro'] == 'inativo' else 'danger' }}">
+                    {{ usuario['situacao_cadastro'] or 'Não informado' }}
+                  </span>
+                </td>
+                <td>{{ usuario['data_cadastro'] }}</td>
+                <td>
+                  <a href="{{ url_for('visualizar_usuario', id=usuario['id']) }}" class="btn btn-sm btn-info">Visualizar</a>
+                  <a href="{{ url_for('editar_usuario', id=usuario['id']) }}" class="btn btn-sm btn-warning">Editar</a>
+                  <form action="{{ url_for('excluir_usuario', id=usuario['id']) }}" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</button>
+                  </form>
+                </td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="5" class="text-center">Nenhum usuário encontrado</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

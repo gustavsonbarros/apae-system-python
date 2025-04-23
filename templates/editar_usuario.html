@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Usuário - APAE</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+  <div class="container my-5">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white text-center">
+        <h3>Editar Usuário - APAE</h3>
+      </div>
+      <div class="card-body">
+
+        <form method="POST" action="{{ url_for('editar_usuario', id=usuario['id']) }}">
+
+          <!-- Informações Pessoais -->
+          <h5 class="mt-3 mb-3">Informações Pessoais</h5>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nome</label>
+              <input type="text" name="nome" class="form-control" value="{{ usuario['nome'] }}" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Nome Social</label>
+              <input type="text" name="nome_social" class="form-control" value="{{ usuario['nome_social'] }}">
+            </div>
+            <!-- Adicione todos os outros campos do formulário de cadastro, 
+                 preenchendo os valores com {{ usuario['nome_do_campo'] }} -->
+            <!-- ... (mantenha a mesma estrutura do cadastro.html, mas com os valores preenchidos) ... -->
+          </div>
+
+          <!-- Botões -->
+          <div class="text-end mt-4">
+            <button type="submit" class="btn btn-success">Salvar Alterações</button>
+            <a href="{{ url_for('visualizar_usuario', id=usuario['id']) }}" class="btn btn-secondary">Cancelar</a>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

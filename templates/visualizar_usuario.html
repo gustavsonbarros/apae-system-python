@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalhes do Usuário - APAE</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+  <div class="container my-5">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3>Detalhes do Usuário</h3>
+          <a href="{{ url_for('listar_usuarios') }}" class="btn btn-light">Voltar</a>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="row mb-4">
+          <div class="col-md-8">
+            <h4>{{ usuario['nome'] }}</h4>
+            <p class="text-muted">CPF: {{ usuario['cpf'] or 'Não informado' }} | 
+              Situação: <span class="badge bg-{{ 'success' if usuario['situacao_cadastro'] == 'ativo' else 'warning' if usuario['situacao_cadastro'] == 'inativo' else 'danger' }}">
+                {{ usuario['situacao_cadastro'] or 'Não informado' }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-4 text-end">
+            <a href="{{ url_for('editar_usuario', id=usuario['id']) }}" class="btn btn-warning">Editar</a>
+            <form action="{{ url_for('excluir_usuario', id=usuario['id']) }}" method="POST" class="d-inline">
+              <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Abas -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab">Informações</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="endereco-tab" data-bs-toggle="tab" data-bs-target="#endereco" type="button" role="tab">Endereço</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="responsaveis-tab" data-bs-toggle="tab" data-bs-target="#responsaveis" type="button" role="tab">Responsáveis</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="saude-tab" data-bs-toggle="tab" data-bs-target="#saude" type="button" role="tab">Saúde</button>
+          </li>
+        </ul>
+
+        <div class="tab-content p-3 border border-top-0 rounded-bottom" id="myTabContent">
+          <!-- Informações Pessoais -->
+          <div class="tab-pane fade show active" id="info" role="tabpanel">
+            <div class="row">
+              <div class="col-md-4">
+                <p><strong>Nome Social:</strong> {{ usuario['nome_social'] or 'Não informado' }}</p>
+                <p><strong>Data de Nascimento:</strong> {{ usuario['data_nascimento'] or 'Não informada' }}</p>
+                <p><strong>Sexo:</strong> {{ usuario['sexo'] or 'Não informado' }}</p>
+              </div>
+              <div class="col-md-4">
+                <p><strong>RG:</strong> {{ usuario['rg'] or 'Não informado' }}</p>
+                <p><strong>Data Emissão RG:</strong> {{ usuario['data_emissao_rg'] or 'Não informada' }}</p>
+                <p><strong>Naturalidade:</strong> {{ usuario['naturalidade'] or 'Não informada' }}</p>
+              </div>
+              <div class="col-md-4">
+                <p><strong>Raça/Cor:</strong> {{ usuario['raca_cor'] or 'Não informada' }}</p>
+                <p><strong>Tipo de Deficiência:</strong> {{ usuario['tipo_deficiencia'] or 'Não informada' }}</p>
+                <p><strong>Mobilidade:</strong> {{ usuario['mobilidade'] or 'Não informada' }}</p>
+              </div>
+            </div>
+            <!-- Adicione mais campos conforme necessário -->
+          </div>
+
+          <!-- Endereço -->
+          <div class="tab-pane fade" id="endereco" role="tabpanel">
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Endereço:</strong> {{ usuario['endereco'] or 'Não informado' }}, {{ usuario['numero'] or 'S/N' }}</p>
+                <p><strong>Complemento:</strong> {{ usuario['complemento'] or 'Não informado' }}</p>
+                <p><strong>Bairro:</strong> {{ usuario['bairro'] or 'Não informado' }}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Cidade:</strong> {{ usuario['cidade'] or 'Não informada' }}/{{ usuario['uf'] or 'UF' }}</p>
+                <p><strong>CEP:</strong> {{ usuario['cep'] or 'Não informado' }}</p>
+                <p><strong>Telefone:</strong> {{ usuario['telefone_residencial'] or 'Não informado' }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Responsáveis -->
+          <div class="tab-pane fade" id="responsaveis" role="tabpanel">
+            <div class="row">
+              <div class="col-md-6">
+                <h5>Mãe</h5>
+                <p><strong>Nome:</strong> {{ usuario['mae_nome'] or 'Não informado' }}</p>
+                <p><strong>CPF:</strong> {{ usuario['mae_cpf'] or 'Não informado' }}</p>
+                <p><strong>Telefone:</strong> {{ usuario['mae_telefone'] or 'Não informado' }}</p>
+                <p><strong>E-mail:</strong> {{ usuario['mae_email'] or 'Não informado' }}</p>
+              </div>
+              <div class="col-md-6">
+                <h5>Pai</h5>
+                <p><strong>Nome:</strong> {{ usuario['pai_nome'] or 'Não informado' }}</p>
+                <p><strong>CPF:</strong> {{ usuario['pai_cpf'] or 'Não informado' }}</p>
+                <p><strong>Telefone:</strong> {{ usuario['pai_telefone'] or 'Não informado' }}</p>
+                <p><strong>E-mail:</strong> {{ usuario['pai_email'] or 'Não informado' }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Saúde -->
+          <div class="tab-pane fade" id="saude" role="tabpanel">
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Utiliza medicamentos:</strong> {{ 'Sim' if usuario['medicamento'] == 'sim' else 'Não' }}</p>
+                <p><strong>Medicamentos:</strong> {{ usuario['qual_medicamento'] or 'Não informado' }}</p>
+                <p><strong>Possui alergia:</strong> {{ 'Sim' if usuario['alergia'] == 'sim' else 'Não' }}</p>
+                <p><strong>Alergias:</strong> {{ usuario['qual_alergia'] or 'Não informado' }}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Possui comorbidade:</strong> {{ 'Sim' if usuario['comorbidade'] == 'sim' else 'Não' }}</p>
+                <p><strong>Comorbidades:</strong> {{ usuario['qual_comorbidade'] or 'Não informado' }}</p>
+                <p><strong>Convênio médico:</strong> {{ 'Sim' if usuario['convenio'] == 'sim' else 'Não' }}</p>
+                <p><strong>Convênio:</strong> {{ usuario['qual_convenio'] or 'Não informado' }}</p>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-12">
+                <p><strong>Observações:</strong> {{ usuario['observacoes'] or 'Nenhuma observação' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="card-footer text-muted">
+        Cadastrado em: {{ usuario['data_cadastro'] }}
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
