@@ -14,8 +14,10 @@ A proposta da página é apresentar os principais serviços oferecidos pela inst
 
 - HTML5
 - CSS3
-- [Bootstrap 5](https://getbootstrap.com/)
-- Bootstrap Icons
+- Python
+- Bootstrap
+- Flask
+- JavaScript
 
 
 ## 📱 Responsividade
