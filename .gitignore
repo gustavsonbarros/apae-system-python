@@ -1,0 +1,44 @@
+# __pycache__ e arquivos compilados
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Ambientes virtuais
+venv/
+.env/
+.venv/
+
+# Arquivos de configuração locais
+.env
+*.env
+
+# VS Code configs
+.vscode/
+
+# Logs e dumps
+*.log
+*.pot
+*.pyc
+
+# Banco de dados local (caso use SQLite)
+*.sqlite3
+*.db
+
+# Diretórios temporários
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+
+# Testes
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+pytest_cache/
+.pytest_cache/
+
+# Arquivos criados pelo Flask
+instance/
+

@@ -1,0 +1,120 @@
+/* Estilos Gerais */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 0.8rem 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s;
+}
+
+.nav-link:hover {
+    color: #fff !important;
+    transform: translateY(-2px);
+}
+
+/* Carrossel */
+.carousel {
+    margin-bottom: 2rem;
+}
+
+.carousel-item img {
+    height: 500px;
+    object-fit: cover;
+    filter: brightness(0.8);
+}
+
+.carousel-caption {
+    background: rgba(0, 82, 164, 0.8); /* Azul APAE */
+    right: unset;
+    left: 10%;
+    bottom: 20%;
+    padding: 2rem;
+    border-radius: 5px;
+    text-align: left;
+    max-width: 500px;
+}
+
+.carousel-caption h5 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    height: 100%;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Botões */
+.btn-primary {
+    background-color: #0052a4; /* Azul APAE */
+    border-color: #0052a4;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: #003d7a;
+    border-color: #003d7a;
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+    .carousel-caption {
+        left: 5%;
+        bottom: 10%;
+        padding: 1rem;
+    }
+    
+    .carousel-caption h5 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-item img {
+        height: 400px;
+    }
+    
+    .carousel-caption {
+        position: relative;
+        left: 0;
+        bottom: 0;
+        max-width: 100%;
+        background: transparent;
+        color: #333;
+        padding: 1rem 0;
+    }
+}

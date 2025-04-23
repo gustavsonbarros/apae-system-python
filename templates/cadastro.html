@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro - APAE</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+  <div class="container my-5">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white text-center">
+        <h3>Cadastro de Usuário - APAE</h3>
+      </div>
+      <div class="card-body">
+
+        <form method="POST" action="{{ url_for('cadastro') }}">
+
+          <!-- Informações Pessoais -->
+          <h5 class="mt-3 mb-3">Informações Pessoais</h5>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nome</label>
+              <input type="text" name="nome" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Nome Social</label>
+              <input type="text" name="nome_social" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Nº Prontuário</label>
+              <input type="text" name="prontuario" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Situação do Cadastro</label>
+              <select name="situacao_cadastro" class="form-control">
+                <option value="">Selecione</option>
+                <option value="ativo">Ativo</option>
+                <option value="inativo">Inativo</option>
+                <option value="suspenso">Suspenso</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Data Entrada/Saída</label>
+              <input type="date" name="data_entrada_saida" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">CPF</label>
+              <input type="text" name="cpf" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">RG</label>
+              <input type="text" name="rg" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Data Emissão RG</label>
+              <input type="date" name="data_emissao_rg" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Nº Cartão Nascimento</label>
+              <input type="text" name="cartao_nascimento" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Livro/Folha</label>
+              <input type="text" name="livro_folha" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Cartório</label>
+              <input type="text" name="cartorio" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Naturalidade</label>
+              <input type="text" name="naturalidade" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Sexo</label>
+              <select name="sexo" class="form-control">
+                <option value="">Selecione</option>
+                <option value="masculino">Masculino</option>
+                <option value="feminino">Feminino</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Data de Nascimento</label>
+              <input type="date" name="data_nascimento" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Ocupação</label>
+              <input type="text" name="ocupacao" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Nº Carteira PCD</label>
+              <input type="text" name="carteira_pcd" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Nº Cartão NIS</label>
+              <input type="text" name="cartao_nis" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Nº Cartão SUS (CRIS)</label>
+              <input type="text" name="cartao_sus" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Raça/Cor</label>
+              <select name="raca_cor" class="form-control">
+                <option value="">Selecione</option>
+                <option value="branca">Branca</option>
+                <option value="preta">Preta</option>
+                <option value="parda">Parda</option>
+                <option value="amarela">Amarela</option>
+                <option value="indigena">Indígena</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Mobilidade</label>
+              <select name="mobilidade" class="form-control">
+                <option value="">Selecione</option>
+                <option value="independente">Independente</option>
+                <option value="cadeirante">Cadeirante</option>
+                <option value="muletas">Muletas</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Tipo de Deficiência</label>
+              <input type="text" name="tipo_deficiencia" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Transtornos</label>
+              <input type="text" name="transtornos" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">CID 10</label>
+              <input type="text" name="cid10" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">CID 10 (opcional)</label>
+              <input type="text" name="cid10_opcional1" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">CID 10 (opcional)</label>
+              <input type="text" name="cid10_opcional2" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">CID 11</label>
+              <input type="text" name="cid11" class="form-control">
+            </div>
+          </div>
+
+          <!-- Área de Atendimento -->
+          <div class="mt-4">
+            <h5>Área de Atendimento</h5>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="area[]" value="assistencia">
+              <label class="form-check-label">Assistência</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="area[]" value="saude">
+              <label class="form-check-label">Saúde</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="area[]" value="educacao">
+              <label class="form-check-label">Educação</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="area[]" value="social">
+              <label class="form-check-label">Social</label>
+            </div>
+          </div>
+
+          <!-- Endereço -->
+          <h5 class="mt-4 mb-3">Endereço</h5>
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label">CEP</label>
+              <input type="text" name="cep" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Endereço</label>
+              <input type="text" name="endereco" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Número</label>
+              <input type="text" name="numero" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Complemento</label>
+              <input type="text" name="complemento" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Bairro</label>
+              <input type="text" name="bairro" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Cidade</label>
+              <input type="text" name="cidade" class="form-control">
+            </div>
+            <div class="col-md-1">
+              <label class="form-label">UF</label>
+              <input type="text" name="uf" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">E-mail</label>
+              <input type="email" name="email" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Telefone Residencial</label>
+              <input type="text" name="telefone_residencial" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Telefone Recados</label>
+              <input type="text" name="telefone_recados" class="form-control">
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Pessoa de Contato</label>
+              <input type="text" name="pessoa_contato" class="form-control">
+            </div>
+          </div>
+
+          <!-- Dados dos Responsáveis -->
+          <h5 class="mt-4 mb-3">Dados da Mãe</h5>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nome da Mãe</label>
+              <input type="text" name="mae_nome" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">CPF</label>
+              <input type="text" name="mae_cpf" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Telefone</label>
+              <input type="text" name="mae_telefone" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">E-mail</label>
+              <input type="email" name="mae_email" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Ocupação</label>
+              <input type="text" name="mae_ocupacao" class="form-control">
+            </div>
+          </div>
+
+          <h5 class="mt-4 mb-3">Dados do Pai</h5>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nome do Pai</label>
+              <input type="text" name="pai_nome" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">CPF</label>
+              <input type="text" name="pai_cpf" class="form-control">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Telefone</label>
+              <input type="text" name="pai_telefone" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">E-mail</label>
+              <input type="email" name="pai_email" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Ocupação</label>
+              <input type="text" name="pai_ocupacao" class="form-control">
+            </div>
+          </div>
+
+          <!-- Saúde -->
+          <h5 class="mt-4 mb-3">Saúde</h5>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Utiliza Medicamentos?</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="medicamento" value="sim">
+                <label class="form-check-label">Sim</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="medicamento" value="nao">
+                <label class="form-check-label">Não</label>
+              </div>
+              <div class="mt-2">
+                <label class="form-label">Quais?</label>
+                <textarea name="qual_medicamento" class="form-control"></textarea>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Possui Alergia?</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="alergia" value="sim">
+                <label class="form-check-label">Sim</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="alergia" value="nao">
+                <label class="form-check-label">Não</label>
+              </div>
+              <div class="mt-2">
+                <label class="form-label">Quais?</label>
+                <textarea name="qual_alergia" class="form-control"></textarea>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Possui Comorbidade?</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="comorbidade" value="sim">
+                <label class="form-check-label">Sim</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="comorbidade" value="nao">
+                <label class="form-check-label">Não</label>
+              </div>
+              <div class="mt-2">
+                <label class="form-label">Quais?</label>
+                <textarea name="qual_comorbidade" class="form-control"></textarea>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Possui Convênio Médico?</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="convenio" value="sim">
+                <label class="form-check-label">Sim</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="convenio" value="nao">
+                <label class="form-check-label">Não</label>
+              </div>
+              <div class="mt-2">
+                <label class="form-label">Qual?</label>
+                <textarea name="qual_convenio" class="form-control"></textarea>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Liberado para Atividade Física?</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="atividade_fisica" value="sim">
+                <label class="form-check-label">Sim</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="atividade_fisica" value="nao">
+                <label class="form-check-label">Não</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Data Liberação</label>
+              <input type="date" name="data_liberacao" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Autorização Uso de Imagem</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="uso_imagem" value="sim">
+                <label class="form-check-label">Sim</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="uso_imagem" value="nao">
+                <label class="form-check-label">Não</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Meio de Transporte (Ida)</label>
+              <select name="transporte_ida" class="form-control">
+                <option value="">Selecione</option>
+                <option value="particular">Particular</option>
+                <option value="transporte_escolar">Transporte Escolar</option>
+                <option value="transporte_publico">Transporte Público</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Meio de Transporte (Volta)</label>
+              <select name="transporte_volta" class="form-control">
+                <option value="">Selecione</option>
+                <option value="particular">Particular</option>
+                <option value="transporte_escolar">Transporte Escolar</option>
+                <option value="transporte_publico">Transporte Público</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Observações</label>
+              <textarea name="observacoes" class="form-control" rows="3"></textarea>
+            </div>
+          </div>
+
+          <!-- Notificações -->
+          <div class="mt-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="notificacao_whatsapp" value="sim">
+              <label class="form-check-label">Enviar notificações via WhatsApp</label>
+            </div>
+          </div>
+
+          <!-- Botões -->
+          <div class="text-end mt-4">
+            <button type="submit" class="btn btn-success">Gravar</button>
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">Cancelar</a>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
