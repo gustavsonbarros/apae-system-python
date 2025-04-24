@@ -15,7 +15,7 @@
       </div>
       <div class="card-body">
 
-        <form method="POST" action="{{ url_for('editar_usuario', id=usuario['id']) }}">
+        <form method="POST" action="{{ url_for('editar_usuario', id=usuario['id']) }}" enctype="multipart/form-data">
 
           <!-- Informações Pessoais -->
           <h5 class="mt-3 mb-3">Informações Pessoais</h5>
@@ -28,9 +28,383 @@
               <label class="form-label">Nome Social</label>
               <input type="text" name="nome_social" class="form-control" value="{{ usuario['nome_social'] }}">
             </div>
-            <!-- Adicione todos os outros campos do formulário de cadastro, 
-                 preenchendo os valores com {{ usuario['nome_do_campo'] }} -->
-            <!-- ... (mantenha a mesma estrutura do cadastro.html, mas com os valores preenchidos) ... -->
+            <div class="col-md-4">
+              <label class="form-label">Nº Prontuário</label>
+              <input type="text" name="prontuario" class="form-control" value="{{ usuario['prontuario'] }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Situação do Cadastro</label>
+              <select name="situacao_cadastro" class="form-control">
+                <option value="">Selecione</option>
+                <option value="ativo" {% if usuario['situacao_cadastro'] == 'ativo' %}selected{% endif %}>Ativo</option>
+                <option value="inativo" {% if usuario['situacao_cadastro'] == 'inativo' %}selected{% endif %}>Inativo</option>
+                <option value="suspenso" {% if usuario['situacao_cadastro'] == 'suspenso' %}selected{% endif %}>Suspenso</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Data Entrada/Saída</label>
+              <input type="date" name="data_entrada_saida" class="form-control" value="{{ usuario['data_entrada_saida'] }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">CPF</label>
+              <input type="text" name="cpf" class="form-control" value="{{ usuario['cpf'] }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">RG</label>
+              <input type="text" name="rg" class="form-control" value="{{ usuario['rg'] }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Data Emissão RG</label>
+              <input type="date" name="data_emissao_rg" class="form-control" value="{{ usuario['data_emissao_rg'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Nº Cartão Nascimento</label>
+              <input type="text" name="cartao_nascimento" class="form-control" value="{{ usuario['cartao_nascimento'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Livro/Folha</label>
+              <input type="text" name="livro_folha" class="form-control" value="{{ usuario['livro_folha'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Cartório</label>
+              <input type="text" name="cartorio" class="form-control" value="{{ usuario['cartorio'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Naturalidade</label>
+              <input type="text" name="naturalidade" class="form-control" value="{{ usuario['naturalidade'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Sexo</label>
+              <select name="sexo" class="form-control">
+                <option value="">Selecione</option>
+                <option value="masculino" {% if usuario['sexo'] == 'masculino' %}selected{% endif %}>Masculino</option>
+                <option value="feminino" {% if usuario['sexo'] == 'feminino' %}selected{% endif %}>Feminino</option>
+                <option value="outro" {% if usuario['sexo'] == 'outro' %}selected{% endif %}>Outro</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Data de Nascimento</label>
+              <input type="date" name="data_nascimento" class="form-control" value="{{ usuario['data_nascimento'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Ocupação</label>
+              <input type="text" name="ocupacao" class="form-control" value="{{ usuario['ocupacao'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Nº Carteira PCD</label>
+              <input type="text" name="carteira_pcd" class="form-control" value="{{ usuario['carteira_pcd'] }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Nº Cartão NIS</label>
+              <input type="text" name="cartao_nis" class="form-control" value="{{ usuario['cartao_nis'] }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Nº Cartão SUS (CRIS)</label>
+              <input type="text" name="cartao_sus" class="form-control" value="{{ usuario['cartao_sus'] }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Raça/Cor</label>
+              <select name="raca_cor" class="form-control">
+                <option value="">Selecione</option>
+                <option value="branca" {% if usuario['raca_cor'] == 'branca' %}selected{% endif %}>Branca</option>
+                <option value="preta" {% if usuario['raca_cor'] == 'preta' %}selected{% endif %}>Preta</option>
+                <option value="parda" {% if usuario['raca_cor'] == 'parda' %}selected{% endif %}>Parda</option>
+                <option value="amarela" {% if usuario['raca_cor'] == 'amarela' %}selected{% endif %}>Amarela</option>
+                <option value="indigena" {% if usuario['raca_cor'] == 'indigena' %}selected{% endif %}>Indígena</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Mobilidade</label>
+              <select name="mobilidade" class="form-control">
+                <option value="">Selecione</option>
+                <option value="independente" {% if usuario['mobilidade'] == 'independente' %}selected{% endif %}>Independente</option>
+                <option value="cadeirante" {% if usuario['mobilidade'] == 'cadeirante' %}selected{% endif %}>Cadeirante</option>
+                <option value="muletas" {% if usuario['mobilidade'] == 'muletas' %}selected{% endif %}>Muletas</option>
+                <option value="outro" {% if usuario['mobilidade'] == 'outro' %}selected{% endif %}>Outro</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Tipo de Deficiência</label>
+              <input type="text" name="tipo_deficiencia" class="form-control" value="{{ usuario['tipo_deficiencia'] }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Transtornos</label>
+              <input type="text" name="transtornos" class="form-control" value="{{ usuario['transtornos'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">CID 10</label>
+              <input type="text" name="cid10" class="form-control" value="{{ usuario['cid10'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">CID 10 (opcional)</label>
+              <input type="text" name="cid10_opcional1" class="form-control" value="{{ usuario['cid10_opcional1'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">CID 10 (opcional)</label>
+              <input type="text" name="cid10_opcional2" class="form-control" value="{{ usuario['cid10_opcional2'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">CID 11</label>
+              <input type="text" name="cid11" class="form-control" value="{{ usuario['cid11'] }}">
+            </div>
+          </div>
+
+          <!-- Área de Atendimento -->
+          <div class="mt-4">
+            <h5>Área de Atendimento</h5>
+            {% set areas = usuario['area'].split(',') if usuario['area'] else [] %}
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="area[]" value="assistencia" {% if 'assistencia' in areas %}checked{% endif %}>
+              <label class="form-check-label">Assistência</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="area[]" value="saude" {% if 'saude' in areas %}checked{% endif %}>
+              <label class="form-check-label">Saúde</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="area[]" value="educacao" {% if 'educacao' in areas %}checked{% endif %}>
+              <label class="form-check-label">Educação</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="area[]" value="social" {% if 'social' in areas %}checked{% endif %}>
+              <label class="form-check-label">Social</label>
+            </div>
+          </div>
+
+          <!-- Endereço -->
+          <h5 class="mt-4 mb-3">Endereço</h5>
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label">CEP</label>
+              <input type="text" name="cep" class="form-control" value="{{ usuario['cep'] }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Endereço</label>
+              <input type="text" name="endereco" class="form-control" value="{{ usuario['endereco'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Número</label>
+              <input type="text" name="numero" class="form-control" value="{{ usuario['numero'] }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Complemento</label>
+              <input type="text" name="complemento" class="form-control" value="{{ usuario['complemento'] }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Bairro</label>
+              <input type="text" name="bairro" class="form-control" value="{{ usuario['bairro'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Cidade</label>
+              <input type="text" name="cidade" class="form-control" value="{{ usuario['cidade'] }}">
+            </div>
+            <div class="col-md-1">
+              <label class="form-label">UF</label>
+              <input type="text" name="uf" class="form-control" value="{{ usuario['uf'] }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">E-mail</label>
+              <input type="email" name="email" class="form-control" value="{{ usuario['email'] }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Telefone Residencial</label>
+              <input type="text" name="telefone_residencial" class="form-control" value="{{ usuario['telefone_residencial'] }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Telefone Recados</label>
+              <input type="text" name="telefone_recados" class="form-control" value="{{ usuario['telefone_recados'] }}">
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Pessoa de Contato</label>
+              <input type="text" name="pessoa_contato" class="form-control" value="{{ usuario['pessoa_contato'] }}">
+            </div>
+          </div>
+
+          <!-- Dados dos Responsáveis -->
+          <h5 class="mt-4 mb-3">Dados da Mãe</h5>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nome da Mãe</label>
+              <input type="text" name="mae_nome" class="form-control" value="{{ usuario['mae_nome'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">CPF</label>
+              <input type="text" name="mae_cpf" class="form-control" value="{{ usuario['mae_cpf'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Telefone</label>
+              <input type="text" name="mae_telefone" class="form-control" value="{{ usuario['mae_telefone'] }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">E-mail</label>
+              <input type="email" name="mae_email" class="form-control" value="{{ usuario['mae_email'] }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Ocupação</label>
+              <input type="text" name="mae_ocupacao" class="form-control" value="{{ usuario['mae_ocupacao'] }}">
+            </div>
+          </div>
+
+          <h5 class="mt-4 mb-3">Dados do Pai</h5>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nome do Pai</label>
+              <input type="text" name="pai_nome" class="form-control" value="{{ usuario['pai_nome'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">CPF</label>
+              <input type="text" name="pai_cpf" class="form-control" value="{{ usuario['pai_cpf'] }}">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Telefone</label>
+              <input type="text" name="pai_telefone" class="form-control" value="{{ usuario['pai_telefone'] }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">E-mail</label>
+              <input type="email" name="pai_email" class="form-control" value="{{ usuario['pai_email'] }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Ocupação</label>
+              <input type="text" name="pai_ocupacao" class="form-control" value="{{ usuario['pai_ocupacao'] }}">
+            </div>
+          </div>
+
+          <!-- Saúde -->
+          <h5 class="mt-4 mb-3">Saúde</h5>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Utiliza Medicamentos?</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="medicamento" value="sim" {% if usuario['medicamento'] == 'sim' %}checked{% endif %}>
+                <label class="form-check-label">Sim</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="medicamento" value="nao" {% if usuario['medicamento'] == 'nao' %}checked{% endif %}>
+                <label class="form-check-label">Não</label>
+              </div>
+              <div class="mt-2">
+                <label class="form-label">Quais?</label>
+                <textarea name="qual_medicamento" class="form-control">{{ usuario['qual_medicamento'] }}</textarea>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Possui Alergia?</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="alergia" value="sim" {% if usuario['alergia'] == 'sim' %}checked{% endif %}>
+                <label class="form-check-label">Sim</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="alergia" value="nao" {% if usuario['alergia'] == 'nao' %}checked{% endif %}>
+                <label class="form-check-label">Não</label>
+              </div>
+              <div class="mt-2">
+                <label class="form-label">Quais?</label>
+                <textarea name="qual_alergia" class="form-control">{{ usuario['qual_alergia'] }}</textarea>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Possui Comorbidade?</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="comorbidade" value="sim" {% if usuario['comorbidade'] == 'sim' %}checked{% endif %}>
+                <label class="form-check-label">Sim</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="comorbidade" value="nao" {% if usuario['comorbidade'] == 'nao' %}checked{% endif %}>
+                <label class="form-check-label">Não</label>
+              </div>
+              <div class="mt-2">
+                <label class="form-label">Quais?</label>
+                <textarea name="qual_comorbidade" class="form-control">{{ usuario['qual_comorbidade'] }}</textarea>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Possui Convênio Médico?</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="convenio" value="sim" {% if usuario['convenio'] == 'sim' %}checked{% endif %}>
+                <label class="form-check-label">Sim</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="convenio" value="nao" {% if usuario['convenio'] == 'nao' %}checked{% endif %}>
+                <label class="form-check-label">Não</label>
+              </div>
+              <div class="mt-2">
+                <label class="form-label">Qual?</label>
+                <textarea name="qual_convenio" class="form-control">{{ usuario['qual_convenio'] }}</textarea>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Liberado para Atividade Física?</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="atividade_fisica" value="sim" {% if usuario['atividade_fisica'] == 'sim' %}checked{% endif %}>
+                <label class="form-check-label">Sim</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="atividade_fisica" value="nao" {% if usuario['atividade_fisica'] == 'nao' %}checked{% endif %}>
+                <label class="form-check-label">Não</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Data Liberação</label>
+              <input type="date" name="data_liberacao" class="form-control" value="{{ usuario['data_liberacao'] }}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Autorização Uso de Imagem</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="uso_imagem" value="sim" {% if usuario['uso_imagem'] == 'sim' %}checked{% endif %}>
+                <label class="form-check-label">Sim</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="uso_imagem" value="nao" {% if usuario['uso_imagem'] == 'nao' %}checked{% endif %}>
+                <label class="form-check-label">Não</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Meio de Transporte (Ida)</label>
+              <select name="transporte_ida" class="form-control">
+                <option value="">Selecione</option>
+                <option value="particular" {% if usuario['transporte_ida'] == 'particular' %}selected{% endif %}>Particular</option>
+                <option value="transporte_escolar" {% if usuario['transporte_ida'] == 'transporte_escolar' %}selected{% endif %}>Transporte Escolar</option>
+                <option value="transporte_publico" {% if usuario['transporte_ida'] == 'transporte_publico' %}selected{% endif %}>Transporte Público</option>
+                <option value="outro" {% if usuario['transporte_ida'] == 'outro' %}selected{% endif %}>Outro</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Meio de Transporte (Volta)</label>
+              <select name="transporte_volta" class="form-control">
+                <option value="">Selecione</option>
+                <option value="particular" {% if usuario['transporte_volta'] == 'particular' %}selected{% endif %}>Particular</option>
+                <option value="transporte_escolar" {% if usuario['transporte_volta'] == 'transporte_escolar' %}selected{% endif %}>Transporte Escolar</option>
+                <option value="transporte_publico" {% if usuario['transporte_volta'] == 'transporte_publico' %}selected{% endif %}>Transporte Público</option>
+                <option value="outro" {% if usuario['transporte_volta'] == 'outro' %}selected{% endif %}>Outro</option>
+              </select>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Laudo Médico Atual</label>
+              {% if usuario['laudo_nome'] %}
+                <p>
+                  <a href="{{ url_for('download_laudo', user_id=usuario['id']) }}" class="btn btn-sm btn-info">
+                    Download: {{ usuario['laudo_nome'] }}
+                  </a>
+                </p>
+              {% else %}
+                <p>Nenhum laudo cadastrado</p>
+              {% endif %}
+              <label class="form-label">Substituir Laudo Médico (opcional)</label>
+              <input type="file" name="laudo" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+              <small class="text-muted">Formatos aceitos: PDF, DOC, DOCX, JPG, PNG (Tamanho máximo: 5MB)</small>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Observações</label>
+              <textarea name="observacoes" class="form-control" rows="3">{{ usuario['observacoes'] }}</textarea>
+            </div>
+          </div>
+
+          <!-- Notificações -->
+          <div class="mt-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="notificacao_whatsapp" value="sim" {% if usuario['notificacao_whatsapp'] == 'sim' %}checked{% endif %}>
+              <label class="form-check-label">Enviar notificações via WhatsApp</label>
+            </div>
           </div>
 
           <!-- Botões -->
