@@ -1,76 +1,29 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory
 import os
 import sqlite3
-import tempfile
-
-
+from werkzeug.utils import secure_filename
 
 app = Flask(
     __name__, static_folder='/home/gustavson-barros/Área de trabalho/apae-system-python/static')
 app.secret_key = 'sua_chave_secreta_aqui'
 
+# Configurações para upload de arquivos
+UPLOAD_FOLDER = 'uploads'
+ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'}
+MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = MAX_FILE_SIZE
 
 usuarios = {
     'admin': 'senha123',
     'funcionario': 'senha456'
 }
 
-
-@app.route('/')
-def home():
-    if 'usuario' in session:
-        return render_template('index.html')
-    return redirect(url_for('login'))
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        usuario = request.form['usuario'].strip()
-        senha = request.form['senha'].strip()
-
-        if not usuario or not senha:
-            flash('Preencha todos os campos', 'danger')
-            return redirect(url_for('login'))
-
-        # Verificação simples (substitua por verificação no banco de dados)
-        if usuario in usuarios and usuarios[usuario] == senha:
-            session['usuario'] = usuario
-            session['nome_usuario'] = usuario.capitalize()  # Armazena o nome do usuário
-            flash(f'Bem-vindo, {usuario.capitalize()}!', 'success')
-            return redirect(url_for('home'))
-        else:
-            flash('Usuário ou senha incorretos', 'danger')
-            return redirect(url_for('login'))
-
-    # Se já estiver logado, redireciona para home
-    if 'usuario' in session:
-        return redirect(url_for('home'))
-
-    return render_template('login.html')
-
-@app.route('/esqueci-senha', methods=['GET', 'POST'])
-def esqueci_senha():
-    if request.method == 'POST':
-        email = request.form.get('email', '').strip()
-        
-        if not email:
-            flash('Por favor, informe seu e-mail', 'danger')
-            return redirect(url_for('esqueci_senha'))
-        
-        # Aqui você implementaria o envio real do e-mail
-        flash('Se o e-mail estiver cadastrado, enviaremos instruções para recuperação', 'info')
-        return redirect(url_for('login'))
-    
-    return render_template('esqueci_senha.html')
-
-
-@app.route('/logout')
-def logout():
-    session.pop('usuario', None)
-    session.pop('nome_usuario', None)
-    flash('Você saiu do sistema', 'info')
-    return redirect(url_for('login'))
+# Funções auxiliares
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def criar_banco_de_dados():
     conn = sqlite3.connect('usuarios.db')
@@ -142,14 +95,132 @@ def criar_banco_de_dados():
         transporte_volta TEXT,
         observacoes TEXT,
         notificacao_whatsapp TEXT,
+        laudo_nome TEXT,
+        laudo_caminho TEXT,
         data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     ''')
     conn.commit()
     conn.close()
 
-# Chamar a função para criar o banco quando o aplicativo iniciar
-criar_banco_de_dados()
+# Rotas de autenticação
+@app.route('/')
+def home():
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    return render_template('index.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        usuario = request.form['usuario'].strip()
+        senha = request.form['senha'].strip()
+
+        if not usuario or not senha:
+            flash('Preencha todos os campos', 'danger')
+            return redirect(url_for('login'))
+
+        if usuario in usuarios and usuarios[usuario] == senha:
+            session['usuario'] = usuario
+            session['nome_usuario'] = usuario.capitalize()
+            flash(f'Bem-vindo, {usuario.capitalize()}!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Usuário ou senha incorretos', 'danger')
+            return redirect(url_for('login'))
+
+    if 'usuario' in session:
+        return redirect(url_for('home'))
+
+    return render_template('login.html')
+
+@app.route('/esqueci-senha', methods=['GET', 'POST'])
+def esqueci_senha():
+    if request.method == 'POST':
+        email = request.form.get('email', '').strip()
+        if not email:
+            flash('Por favor, informe seu e-mail', 'danger')
+            return redirect(url_for('esqueci_senha'))
+        flash('Se o e-mail estiver cadastrado, enviaremos instruções para recuperação', 'info')
+        return redirect(url_for('login'))
+    return render_template('esqueci_senha.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('usuario', None)
+    session.pop('nome_usuario', None)
+    flash('Você saiu do sistema', 'info')
+    return redirect(url_for('login'))
+
+# Rotas de gerenciamento de usuários
+@app.route('/cadastro', methods=['GET', 'POST'])
+def cadastro():
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        try:
+            # Processar upload do laudo
+            laudo_nome = ''
+            laudo_caminho = ''
+            
+            if 'laudo' in request.files:
+                file = request.files['laudo']
+                if file and file.filename != '' and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    file.save(filepath)
+                    laudo_nome = filename
+                    laudo_caminho = filepath
+
+            # Processar outros dados do formulário
+            dados = request.form.to_dict(flat=False)
+            dados_limpos = {}
+            
+            for chave, valor in dados.items():
+                if isinstance(valor, list):
+                    dados_limpos[chave] = ','.join(valor)
+                else:
+                    dados_limpos[chave] = valor
+
+            campos = [
+                'nome', 'nome_social', 'prontuario', 'situacao_cadastro', 'data_entrada_saida',
+                'cpf', 'rg', 'data_emissao_rg', 'cartao_nascimento', 'livro_folha', 'cartorio',
+                'naturalidade', 'sexo', 'data_nascimento', 'ocupacao', 'carteira_pcd', 'cartao_nis',
+                'cartao_sus', 'raca_cor', 'mobilidade', 'tipo_deficiencia', 'transtornos',
+                'cid10', 'cid10_opcional1', 'cid10_opcional2', 'cid11', 'area', 'cep', 'endereco',
+                'numero', 'complemento', 'bairro', 'cidade', 'uf', 'email', 'telefone_residencial',
+                'telefone_recados', 'pessoa_contato', 'mae_nome', 'mae_cpf', 'mae_telefone',
+                'mae_email', 'mae_ocupacao', 'pai_nome', 'pai_cpf', 'pai_telefone', 'pai_email',
+                'pai_ocupacao', 'medicamento', 'qual_medicamento', 'alergia', 'qual_alergia',
+                'comorbidade', 'qual_comorbidade', 'convenio', 'qual_convenio', 'atividade_fisica',
+                'data_liberacao', 'uso_imagem', 'transporte_ida', 'transporte_volta',
+                'observacoes', 'notificacao_whatsapp', 'laudo_nome', 'laudo_caminho'
+            ]
+
+            valores = [dados_limpos.get(campo, '') for campo in campos[:-2]]  # Todos exceto os 2 últimos
+            valores.extend([laudo_nome, laudo_caminho])  # Adiciona dados do laudo
+
+            conn = sqlite3.connect('usuarios.db')
+            cursor = conn.cursor()
+            
+            cursor.execute(f'''
+                INSERT INTO usuarios ({','.join(campos)})
+                VALUES ({','.join(['?'] * len(campos))})
+            ''', valores)
+            
+            conn.commit()
+            conn.close()
+
+            flash('Cadastro realizado com sucesso!', 'success')
+            return redirect(url_for('listar_usuarios'))
+
+        except Exception as e:
+            flash(f'Erro ao cadastrar: {str(e)}', 'danger')
+            return redirect(url_for('cadastro'))
+
+    return render_template('cadastro.html')
 
 @app.route('/usuario/<int:id>/editar', methods=['GET', 'POST'])
 def editar_usuario(id):
@@ -162,6 +233,20 @@ def editar_usuario(id):
 
     if request.method == 'POST':
         try:
+            # Processar upload do laudo (se houver novo arquivo)
+            laudo_nome = ''
+            laudo_caminho = ''
+            
+            if 'laudo' in request.files:
+                file = request.files['laudo']
+                if file and file.filename != '' and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    file.save(filepath)
+                    laudo_nome = filename
+                    laudo_caminho = filepath
+
             dados = request.form.to_dict(flat=False)
             dados_limpos = {}
 
@@ -186,8 +271,17 @@ def editar_usuario(id):
                 'observacoes', 'notificacao_whatsapp'
             ]
 
+            # Se um novo laudo foi enviado, atualiza esses campos também
+            if laudo_nome and laudo_caminho:
+                campos.extend(['laudo_nome', 'laudo_caminho'])
+
             set_clause = ', '.join([f"{campo} = ?" for campo in campos])
             valores = [dados_limpos.get(campo, '') for campo in campos]
+            
+            # Se um novo laudo foi enviado, adiciona esses valores
+            if laudo_nome and laudo_caminho:
+                valores.extend([laudo_nome, laudo_caminho])
+            
             valores.append(id)
 
             cursor.execute(f'''
@@ -218,6 +312,28 @@ def editar_usuario(id):
 
     return render_template('editar_usuario.html', usuario=usuario)
 
+@app.route('/download/laudo/<int:user_id>')
+def download_laudo(user_id):
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    conn = sqlite3.connect('usuarios.db')
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("SELECT laudo_nome, laudo_caminho FROM usuarios WHERE id = ?", (user_id,))
+    usuario = cursor.fetchone()
+    conn.close()
+
+    if not usuario or not usuario['laudo_caminho']:
+        flash('Laudo não encontrado', 'danger')
+        return redirect(url_for('visualizar_usuario', id=user_id))
+
+    return send_from_directory(
+        os.path.dirname(usuario['laudo_caminho']),
+        os.path.basename(usuario['laudo_caminho']),
+        as_attachment=True,
+        download_name=usuario['laudo_nome']
+    )
 
 @app.route('/usuario/<int:id>/excluir', methods=['POST'])
 def excluir_usuario(id):
@@ -226,68 +342,24 @@ def excluir_usuario(id):
 
     conn = sqlite3.connect('usuarios.db')
     cursor = conn.cursor()
+    
+    # Primeiro obtemos o caminho do laudo para excluir o arquivo
+    cursor.execute("SELECT laudo_caminho FROM usuarios WHERE id = ?", (id,))
+    usuario = cursor.fetchone()
+    
+    if usuario and usuario[0]:
+        try:
+            os.remove(usuario[0])
+        except OSError:
+            pass  # Se o arquivo não existir, continuamos normalmente
+    
+    # Agora excluímos o registro do banco de dados
     cursor.execute("DELETE FROM usuarios WHERE id = ?", (id,))
     conn.commit()
     conn.close()
 
     flash('Usuário excluído com sucesso!', 'success')
     return redirect(url_for('listar_usuarios'))
-
-
-@app.route('/cadastro', methods=['GET', 'POST'])
-def cadastro():
-    if 'usuario' not in session:
-        return redirect(url_for('login'))
-
-    if request.method == 'POST':
-        try:
-            dados = request.form.to_dict(flat=False)
-            dados_limpos = {}
-
-            # Processa os dados do formulário
-            for chave, valor in dados.items():
-                if isinstance(valor, list):
-                    dados_limpos[chave] = ','.join(valor)
-                else:
-                    dados_limpos[chave] = valor
-
-            campos = [
-                'nome', 'nome_social', 'prontuario', 'situacao_cadastro', 'data_entrada_saida',
-                'cpf', 'rg', 'data_emissao_rg', 'cartao_nascimento', 'livro_folha', 'cartorio',
-                'naturalidade', 'sexo', 'data_nascimento', 'ocupacao', 'carteira_pcd', 'cartao_nis',
-                'cartao_sus', 'raca_cor', 'mobilidade', 'tipo_deficiencia', 'transtornos',
-                'cid10', 'cid10_opcional1', 'cid10_opcional2', 'cid11', 'area', 'cep', 'endereco',
-                'numero', 'complemento', 'bairro', 'cidade', 'uf', 'email', 'telefone_residencial',
-                'telefone_recados', 'pessoa_contato', 'mae_nome', 'mae_cpf', 'mae_telefone',
-                'mae_email', 'mae_ocupacao', 'pai_nome', 'pai_cpf', 'pai_telefone', 'pai_email',
-                'pai_ocupacao', 'medicamento', 'qual_medicamento', 'alergia', 'qual_alergia',
-                'comorbidade', 'qual_comorbidade', 'convenio', 'qual_convenio', 'atividade_fisica',
-                'data_liberacao', 'uso_imagem', 'transporte_ida', 'transporte_volta',
-                'observacoes', 'notificacao_whatsapp'
-            ]
-
-            valores = [dados_limpos.get(campo, '') for campo in campos]
-
-            conn = sqlite3.connect('usuarios.db')
-            cursor = conn.cursor()
-            
-            # Insere os dados no banco
-            cursor.execute(f'''
-                INSERT INTO usuarios ({','.join(campos)})
-                VALUES ({','.join(['?'] * len(campos))})
-            ''', valores)
-            
-            conn.commit()
-            conn.close()
-
-            flash('Cadastro realizado com sucesso!', 'success')
-            return redirect(url_for('listar_usuarios'))
-
-        except Exception as e:
-            flash(f'Erro ao cadastrar: {str(e)}', 'danger')
-            return redirect(url_for('cadastro'))
-
-    return render_template('cadastro.html')
 
 @app.route('/usuarios')
 def listar_usuarios():
@@ -341,12 +413,17 @@ def visualizar_usuario(id):
 
     return render_template('visualizar_usuario.html', usuario=usuario)
 
-
-
+# Outras rotas
 @app.route('/sobre')
 def sobre():
     return render_template('sobre.html')
 
-
+# Inicialização
 if __name__ == '__main__':
+    # Garantir que a pasta de uploads existe
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+    
+    # Criar banco de dados se não existir
+    criar_banco_de_dados()
+    
     app.run(debug=True)

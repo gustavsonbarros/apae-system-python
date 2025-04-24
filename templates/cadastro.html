@@ -15,7 +15,7 @@
       </div>
       <div class="card-body">
 
-        <form method="POST" action="{{ url_for('cadastro') }}">
+        <form method="POST" action="{{ url_for('cadastro') }}" enctype="multipart/form-data">
 
           <!-- Informações Pessoais -->
           <h5 class="mt-3 mb-3">Informações Pessoais</h5>
@@ -376,6 +376,11 @@
                 <option value="transporte_publico">Transporte Público</option>
                 <option value="outro">Outro</option>
               </select>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Anexar Laudo Médico</label>
+              <input type="file" name="laudo" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+              <small class="text-muted">Formatos aceitos: PDF, DOC, DOCX, JPG, PNG (Tamanho máximo: 5MB)</small>
             </div>
             <div class="col-md-12">
               <label class="form-label">Observações</label>

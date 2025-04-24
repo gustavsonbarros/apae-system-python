@@ -110,28 +110,39 @@
           </div>
 
           <!-- Saúde -->
-          <div class="tab-pane fade" id="saude" role="tabpanel">
-            <div class="row">
-              <div class="col-md-6">
-                <p><strong>Utiliza medicamentos:</strong> {{ 'Sim' if usuario['medicamento'] == 'sim' else 'Não' }}</p>
-                <p><strong>Medicamentos:</strong> {{ usuario['qual_medicamento'] or 'Não informado' }}</p>
-                <p><strong>Possui alergia:</strong> {{ 'Sim' if usuario['alergia'] == 'sim' else 'Não' }}</p>
-                <p><strong>Alergias:</strong> {{ usuario['qual_alergia'] or 'Não informado' }}</p>
-              </div>
-              <div class="col-md-6">
-                <p><strong>Possui comorbidade:</strong> {{ 'Sim' if usuario['comorbidade'] == 'sim' else 'Não' }}</p>
-                <p><strong>Comorbidades:</strong> {{ usuario['qual_comorbidade'] or 'Não informado' }}</p>
-                <p><strong>Convênio médico:</strong> {{ 'Sim' if usuario['convenio'] == 'sim' else 'Não' }}</p>
-                <p><strong>Convênio:</strong> {{ usuario['qual_convenio'] or 'Não informado' }}</p>
-              </div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-md-12">
-                <p><strong>Observações:</strong> {{ usuario['observacoes'] or 'Nenhuma observação' }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+<div class="tab-pane fade" id="saude" role="tabpanel">
+  <div class="row">
+    <div class="col-md-6">
+      <p><strong>Utiliza medicamentos:</strong> {{ 'Sim' if usuario['medicamento'] == 'sim' else 'Não' }}</p>
+      <p><strong>Medicamentos:</strong> {{ usuario['qual_medicamento'] or 'Não informado' }}</p>
+      <p><strong>Possui alergia:</strong> {{ 'Sim' if usuario['alergia'] == 'sim' else 'Não' }}</p>
+      <p><strong>Alergias:</strong> {{ usuario['qual_alergia'] or 'Não informado' }}</p>
+    </div>
+    <div class="col-md-6">
+      <p><strong>Possui comorbidade:</strong> {{ 'Sim' if usuario['comorbidade'] == 'sim' else 'Não' }}</p>
+      <p><strong>Comorbidades:</strong> {{ usuario['qual_comorbidade'] or 'Não informado' }}</p>
+      <p><strong>Convênio médico:</strong> {{ 'Sim' if usuario['convenio'] == 'sim' else 'Não' }}</p>
+      <p><strong>Convênio:</strong> {{ usuario['qual_convenio'] or 'Não informado' }}</p>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <p><strong>Observações:</strong> {{ usuario['observacoes'] or 'Nenhuma observação' }}</p>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <p><strong>Laudo Médico:</strong> 
+        {% if usuario['laudo'] %}
+          <a href="{{ url_for('static', filename='uploads/' + usuario['laudo']) }}" target="_blank">Visualizar Laudo</a>
+        {% else %}
+          Nenhum laudo anexado
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</div>
+
 
       </div>
       <div class="card-footer text-muted">
