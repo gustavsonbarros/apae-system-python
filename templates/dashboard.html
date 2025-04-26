@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Painel Administrativo</h2>
+    
+    <!-- Cards de Resumo -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Total de Usuários</h5>
+                    <h2 class="card-text">{{ total_usuarios }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Ativos</h5>
+                    <h2 class="card-text">{{ ativos }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Inativos</h5>
+                    <h2 class="card-text">{{ inativos }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-danger">
+                <div class="card-body">
+                    <h5 class="card-title">Suspensos</h5>
+                    <h2 class="card-text">{{ suspensos }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Gráficos e Estatísticas -->
+    <div class="row">
+        <!-- Gráfico de Situação -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    Situação dos Usuários
+                </div>
+                <div class="card-body">
+                    <canvas id="situacaoChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Gráfico de Áreas -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    Distribuição por Área de Atendimento
+                </div>
+                <div class="card-body">
+                    <canvas id="areasChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Últimos Cadastros -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    Últimos Cadastros
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Data de Cadastro</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for usuario in ultimos_cadastros %}
+                                <tr>
+                                    <td>{{ usuario['nome'] }}</td>
+                                    <td>{{ usuario['data_cadastro'] }}</td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="2">Nenhum cadastro recente</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Elemento para passar dados do Flask para JavaScript -->
+<script id="chart-data" type="application/json">
+    {
+        "ativos": {{ ativos|default(0)|tojson }},
+        "inativos": {{ inativos|default(0)|tojson }},
+        "suspensos": {{ suspensos|default(0)|tojson }},
+        "areas": {
+            "assistencia": {{ areas.assistencia|default(0)|tojson }},
+            "saude": {{ areas.saude|default(0)|tojson }},
+            "educacao": {{ areas.educacao|default(0)|tojson }},
+            "social": {{ areas.social|default(0)|tojson }}
+        }
+    }
+    </script>
+    
+    <!-- Inclua Chart.js e seu arquivo JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+{% endblock %}
