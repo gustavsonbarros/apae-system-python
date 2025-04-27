@@ -102,6 +102,10 @@
         </div>
     </div>
 </div>
+<!-- Container para Toasts - Deve ficar em um local fixo -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="toastContainer" class="toast-container"></div>
+</div>
 
 <!-- Elemento para passar dados do Flask para JavaScript -->
 <script id="chart-data" type="application/json">
@@ -121,5 +125,7 @@
     <!-- Inclua Chart.js e seu arquivo JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+
 
 {% endblock %}

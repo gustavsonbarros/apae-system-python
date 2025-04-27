@@ -174,7 +174,7 @@ def esqueci_senha():
 def logout():
     session.pop('usuario', None)
     session.pop('nome_usuario', None)
-    session.pop('tipo_usuario', None)  # Limpa o tipo de usuário
+    session.pop('tipo_usuario', None)  
     flash('Você saiu do sistema', 'info')
     return redirect(url_for('login'))
 
@@ -362,7 +362,7 @@ def editar_usuario(id):
             flash(f'Erro ao atualizar usuário: {str(e)}', 'danger')
             return redirect(url_for('editar_usuario', id=id))
 
-    # GET - Buscar usuário para edição
+    
     cursor.execute("SELECT * FROM usuarios WHERE id = ?", (id,))
     usuario = cursor.fetchone()
     conn.close()
@@ -404,7 +404,7 @@ def excluir_usuario(id):
     conn = sqlite3.connect('usuarios.db')
     cursor = conn.cursor()
     
-    # Primeiro obtemos o caminho do laudo para excluir o arquivo
+    
     cursor.execute("SELECT laudo_caminho FROM usuarios WHERE id = ?", (id,))
     usuario = cursor.fetchone()
     
@@ -412,9 +412,9 @@ def excluir_usuario(id):
         try:
             os.remove(usuario[0])
         except OSError:
-            pass  # Se o arquivo não existir, continuamos normalmente
+            pass  
     
-    # Agora excluímos o registro do banco de dados
+    
     cursor.execute("DELETE FROM usuarios WHERE id = ?", (id,))
     conn.commit()
     conn.close()
@@ -497,7 +497,7 @@ def dashboard():
     cursor.execute("SELECT COUNT(*) as suspensos FROM usuarios WHERE situacao_cadastro = 'suspenso'")
     suspensos = cursor.fetchone()['suspensos']
     
-    # Distribuição por área (ajuste conforme sua estrutura de banco de dados)
+    
     areas = {
         'assistencia': 0,
         'saude': 0,
@@ -505,8 +505,7 @@ def dashboard():
         'social': 0
     }
     
-    # Preencha os valores reais conforme sua estrutura
-    # Exemplo:
+    
     cursor.execute("SELECT COUNT(*) as count FROM usuarios WHERE area LIKE '%assistencia%'")
     areas['assistencia'] = cursor.fetchone()['count']
     # Repita para outras áreas...
@@ -527,7 +526,7 @@ def dashboard():
 
 
 
-# Outras rotas
+
 @app.route('/sobre')
 def sobre():
     return render_template('sobre.html')
@@ -537,7 +536,7 @@ if __name__ == '__main__':
     # Garantir que a pasta de uploads existe
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
     
-    # Criar banco de dados se não existir
+    
     criar_banco_de_dados()
     
     app.run(debug=True)

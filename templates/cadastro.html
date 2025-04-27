@@ -2,94 +2,64 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cadastro - APAE</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 </head>
 <body class="bg-light">
 
-  <div class="container my-5">
+  <div class="container my-3">
     <div class="card shadow">
-      <div class="card-header bg-primary text-white text-center">
-        <h3>Cadastro de Usuário - APAE</h3>
-        <div class="text-end mb-3">
-          <a href="{{ url_for('home') }}" class="btn btn-outline-light">
-              <i class="bi bi-arrow-left"></i> Voltar para Início
+      <div class="card-header bg-primary text-white">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="mb-0">Cadastro de Usuário</h3>
+          <a href="{{ url_for('home') }}" class="btn btn-sm btn-outline-light">
+            <i class="bi bi-arrow-left"></i> Voltar
           </a>
+        </div>
       </div>
       
-      
-      </a>
-      </div>
       <div class="card-body">
-
         <form method="POST" action="{{ url_for('cadastro') }}" enctype="multipart/form-data">
 
-          <!-- Informações Pessoais -->
-          <h5 class="mt-3 mb-3">Informações Pessoais</h5>
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label">Nome</label>
-              <input type="text" name="nome" class="form-control" required>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Nome Social</label>
-              <input type="text" name="nome_social" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Nº Prontuário</label>
-              <input type="text" name="prontuario" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Situação do Cadastro</label>
-              <select name="situacao_cadastro" class="form-control">
-                <option value="">Selecione</option>
-                <option value="ativo">Ativo</option>
-                <option value="inativo">Inativo</option>
-                <option value="suspenso">Suspenso</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Data Entrada/Saída</label>
-              <input type="date" name="data_entrada_saida" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">CPF</label>
-              <input type="text" name="cpf" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">RG</label>
-              <input type="text" name="rg" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Data Emissão RG</label>
-              <input type="date" name="data_emissao_rg" class="form-control">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Nº Cartão Nascimento</label>
-              <input type="text" name="cartao_nascimento" class="form-control">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Livro/Folha</label>
-              <input type="text" name="livro_folha" class="form-control">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Cartório</label>
-              <input type="text" name="cartorio" class="form-control">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Naturalidade</label>
-              <input type="text" name="naturalidade" class="form-control">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Sexo</label>
-              <select name="sexo" class="form-control">
-                <option value="">Selecione</option>
-                <option value="masculino">Masculino</option>
-                <option value="feminino">Feminino</option>
-                <option value="outro">Outro</option>
-              </select>
-            </div>
+          <!-- Seções recolhíveis para melhor organização -->
+          <div class="accordion" id="formAccordion">
+            
+            <!-- Informações Pessoais -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                  <i class="bi bi-person-fill me-2"></i> Informações Pessoais
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#formAccordion">
+                <div class="accordion-body">
+                  <div class="row g-2">
+                    <div class="col-12">
+                      <label class="form-label">Nome Completo*</label>
+                      <input type="text" name="nome" class="form-control form-control-sm" required>
+                    </div>
+                    <div class="col-12">
+                      <label class="form-label">Nome Social</label>
+                      <input type="text" name="nome_social" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <label class="form-label">Data de Nascimento</label>
+                      <input type="date" name="data_nascimento" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <label class="form-label">Sexo</label>
+                      <select name="sexo" class="form-select form-select-sm">
+                        <option value="">Selecione</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="feminino">Feminino</option>
+                        <option value="outro">Outro</option>
+                      </select>
+                    </div>
+
+
             <div class="col-md-3">
               <label class="form-label">Data de Nascimento</label>
               <input type="date" name="data_nascimento" class="form-control">
@@ -179,16 +149,24 @@
           </div>
 
           <!-- Endereço -->
-          <h5 class="mt-4 mb-3">Endereço</h5>
-          <div class="row g-3">
-            <div class="col-md-3">
-              <label class="form-label">CEP</label>
-              <input type="text" name="cep" class="form-control">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Endereço</label>
-              <input type="text" name="endereco" class="form-control">
-            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                  <i class="bi bi-house-fill me-2"></i> Endereço
+                </button>
+              </h2>
+              <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                <div class="accordion-body">
+                  <div class="row g-2">
+                    <div class="col-12 col-md-4">
+                      <label class="form-label">CEP</label>
+                      <input type="text" name="cep" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-12 col-md-8">
+                      <label class="form-label">Endereço</label>
+                      <input type="text" name="endereco" class="form-control form-control-sm">
+                    </div>
+
             <div class="col-md-3">
               <label class="form-label">Número</label>
               <input type="text" name="numero" class="form-control">
@@ -405,12 +383,51 @@
           </div>
 
           <!-- Botões -->
-          <div class="text-end mt-4">
-            <button type="submit" class="btn btn-success">Gravar</button>
-            <a href="{{ url_for('home') }}" class="btn btn-secondary">Cancelar</a>
-          </div>
+          <div class="fixed-bottom p-3 bg-light border-top">
+            <div class="container">
+              <div class="d-flex justify-content-between">
+                <a href="{{ url_for('home') }}" class="btn btn-secondary btn-sm">
+                  <i class="bi bi-x-lg"></i> Cancelar
+                </a>
+                <button type="submit" class="btn btn-success btn-sm">
+                  <i class="bi bi-check-lg"></i> Gravar
+                </button>
 
-        </form>
+              </form>
+              </div>
+            </div>
+          </div>
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Exemplo de máscara para campos como CPF e telefone
+    document.addEventListener('DOMContentLoaded', function() {
+      // Máscara para CPF
+      const cpfFields = document.querySelectorAll('input[name="cpf"], input[name="mae_cpf"], input[name="pai_cpf"]');
+      cpfFields.forEach(field => {
+        field.addEventListener('input', function(e) {
+          let value = e.target.value.replace(/\D/g, '');
+          if (value.length > 3) value = value.replace(/^(\d{3})(\d)/g, '$1.$2');
+          if (value.length > 6) value = value.replace(/^(\d{3})\.(\d{3})(\d)/g, '$1.$2.$3');
+          if (value.length > 9) value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/g, '$1.$2.$3-$4');
+          e.target.value = value.substring(0, 14);
+        });
+      });
+
+      // Máscara para telefone
+      const telFields = document.querySelectorAll('input[type="text"][name*="telefone"]');
+      telFields.forEach(field => {
+        field.addEventListener('input', function(e) {
+          let value = e.target.value.replace(/\D/g, '');
+          if (value.length > 0) value = '(' + value;
+          if (value.length > 3) value = value.substring(0, 3) + ') ' + value.substring(3);
+          if (value.length > 10) value = value.substring(0, 10) + '-' + value.substring(10);
+          e.target.value = value.substring(0, 15);
+        });
+      });
+    });
+  </script>
+
+       
 
       </div>
     </div>
