@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 import os
 import sqlite3
 from werkzeug.utils import secure_filename
+from functools import wraps
+
 
 app = Flask(
     __name__, static_folder='/home/gustavson-barros/Área de trabalho/apae-system-python/static')
@@ -15,9 +17,16 @@ MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = MAX_FILE_SIZE
 
+# Substitua o dicionário atual de usuários por:
 usuarios = {
-    'admin': 'senha123',
-    'funcionario': 'senha456'
+    'admin': {
+        'senha': 'senha123',  # Lembre-se de usar hash na senha em produção
+        'tipo': 'admin'
+    },
+    'funcionario': {
+        'senha': 'senha456',
+        'tipo': 'funcionario'
+    }
 }
 
 # Funções auxiliares
@@ -120,9 +129,11 @@ def login():
             flash('Preencha todos os campos', 'danger')
             return redirect(url_for('login'))
 
-        if usuario in usuarios and usuarios[usuario] == senha:
+        # Verificação do usuário
+        if usuario in usuarios and usuarios[usuario]['senha'] == senha:
             session['usuario'] = usuario
             session['nome_usuario'] = usuario.capitalize()
+            session['tipo_usuario'] = usuarios[usuario]['tipo']  # Armazena o tipo
             flash(f'Bem-vindo, {usuario.capitalize()}!', 'success')
             return redirect(url_for('home'))
         else:
@@ -133,6 +144,16 @@ def login():
         return redirect(url_for('home'))
 
     return render_template('login.html')
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'tipo_usuario' not in session or session['tipo_usuario'] != 'admin':
+            flash('Acesso restrito a administradores', 'danger')
+            return redirect(url_for('home'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 
 @app.route('/esqueci-senha', methods=['GET', 'POST'])
 def esqueci_senha():
@@ -149,6 +170,7 @@ def esqueci_senha():
 def logout():
     session.pop('usuario', None)
     session.pop('nome_usuario', None)
+    session.pop('tipo_usuario', None)  # Limpa o tipo de usuário
     flash('Você saiu do sistema', 'info')
     return redirect(url_for('login'))
 
@@ -414,6 +436,7 @@ def visualizar_usuario(id):
     return render_template('visualizar_usuario.html', usuario=usuario)
 
 @app.route('/dashboard')
+@admin_required
 def dashboard():
     if 'usuario' not in session:
         return redirect(url_for('login'))

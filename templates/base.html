@@ -21,6 +21,13 @@
         main {
             flex: 1;
         }
+        
+        /* Estilo adicional para mensagem de acesso negado */
+        .access-denied {
+            max-width: 600px;
+            margin: 2rem auto;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -37,7 +44,11 @@
                             <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Início</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ url_for('cadastro') }}">Cadastro</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ url_for('listar_usuarios') }}">Lista de Usuários</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}">Painel Administrativo</a></li>  
+                            
+                            {% if session.get('tipo_usuario') == 'admin' %}
+                                <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}">Painel Administrativo</a></li>
+                            {% endif %}
+                            
                             <li class="nav-item"><a class="nav-link" href="{{ url_for('sobre') }}">Sobre</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Sair</a></li>
                         {% else %}
@@ -60,7 +71,18 @@
                 {% endif %}
             {% endwith %}
 
-            {% block content %}{% endblock %}
+            {% block content %}
+                <!-- Conteúdo padrão que será sobrescrito por templates filhos -->
+                {% if admin_required and session.get('tipo_usuario') != 'admin' %}
+                    <div class="access-denied alert alert-danger">
+                        <h4>Acesso Negado</h4>
+                        <p>Você não tem permissão para acessar esta área.</p>
+                        <a href="{{ url_for('home') }}" class="btn btn-primary">Voltar à Página Inicial</a>
+                    </div>
+                {% else %}
+                    <!-- O conteúdo específico de cada página será inserido aqui -->
+                {% endif %}
+            {% endblock %}
         </main>
 
         <footer class="bg-dark text-white mt-5 py-3">
