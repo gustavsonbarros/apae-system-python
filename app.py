@@ -1,4 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory, make_response
+import pandas as pd
+from io import StringIO, BytesIO
+import csv
+import sqlite3
 import os
 import sqlite3
 from werkzeug.utils import secure_filename
@@ -243,6 +247,41 @@ def cadastro():
             return redirect(url_for('cadastro'))
 
     return render_template('cadastro.html')
+
+@app.route('/exportar/usuarios_csv')
+def exportar_usuarios_csv():
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+
+    # Conectar ao banco de dados
+    conn = sqlite3.connect('usuarios.db')
+    cursor = conn.cursor()
+    
+    # Obter dados e nomes das colunas
+    cursor.execute("SELECT * FROM usuarios")
+    usuarios = cursor.fetchall()
+    colunas = [desc[0] for desc in cursor.description]
+    conn.close()
+
+    # Criar arquivo CSV em memória
+    output = StringIO()
+    writer = csv.writer(output)
+    
+    # Escrever cabeçalho
+    writer.writerow(colunas)
+    
+    # Escrever dados
+    writer.writerows(usuarios)
+    
+    # Configurar resposta
+    output.seek(0)
+    response = make_response(output.getvalue())
+    response.headers['Content-Disposition'] = 'attachment; filename=usuarios_apae.csv'
+    response.headers['Content-type'] = 'text/csv'
+    
+    return response
+
+
 
 @app.route('/usuario/<int:id>/editar', methods=['GET', 'POST'])
 def editar_usuario(id):

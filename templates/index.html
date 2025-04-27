@@ -2,7 +2,9 @@
 
 {% block content %}
     <!-- Carrossel -->
-    <div id="meuCarrossel" class="carousel slide" data-bs-ride="carousel">
+    <div id="meuCarrossel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+
+
         <div class="carousel-indicators">
             {% for i in range(4) %}
             <button type="button" data-bs-target="#meuCarrossel" data-bs-slide-to="{{ i }}" {% if loop.first %}class="active"{% endif %}></button>
@@ -123,18 +125,17 @@
         </div>
     </div>
 <!-- Seção de Vídeo Reduzida -->
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Assista e Saiba Mais</h2>
-    <div class="d-flex justify-content-center">
-        <div class="ratio ratio-16x9" style="max-width: 600px; width: 100%;">
-            <iframe 
-                src="https://www.youtube.com/embed/y-_Ly5Tqggc" 
-                title="Vídeo sobre autismo - Saúde da Infância" 
-                allowfullscreen>
-            </iframe>
-        </div>
+<div class="d-flex justify-content-center">
+    <div class="ratio ratio-16x9 rounded shadow" style="max-width: 600px; width: 100%; overflow: hidden;">
+        <iframe 
+            src="https://www.youtube.com/embed/y-_Ly5Tqggc" 
+            title="Vídeo sobre autismo - Saúde da Infância" 
+            allowfullscreen 
+            style="border: 0;">
+        </iframe>
     </div>
 </div>
+
 
 
 {% endblock %}
