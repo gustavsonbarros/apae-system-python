@@ -135,8 +135,7 @@ def criar_banco_de_dados():
 # Rotas de autenticação
 @app.route('/')
 def home():
-    if 'usuario' not in session:
-        return redirect(url_for('login'))
+    # Página pública - não requer login
     return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -304,6 +303,31 @@ def feedback():
     
     return render_template('feedback.html')
 
+
+@app.route('/admin/feedback/<int:id>/excluir', methods=['POST'])
+@admin_required
+def excluir_feedback(id):
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    
+    try:
+        conn = sqlite3.connect('usuarios.db')
+        cursor = conn.cursor()
+        
+        cursor.execute("DELETE FROM feedbacks WHERE id = ?", (id,))
+        conn.commit()
+        conn.close()
+        
+        flash('Feedback excluído com sucesso!', 'success')
+    except Exception as e:
+        flash(f'Erro ao excluir feedback: {str(e)}', 'danger')
+    
+    return redirect(url_for('listar_feedbacks'))
+
+
+
+
+
 @app.route('/admin/feedbacks')
 @admin_required
 def listar_feedbacks():
@@ -362,6 +386,8 @@ def responder_feedback(id):
     except Exception as e:
         flash(f'Erro ao responder feedback: {str(e)}', 'danger')
         return redirect(url_for('listar_feedbacks'))
+    
+
 
 
 @app.route('/exportar/usuarios_csv')
