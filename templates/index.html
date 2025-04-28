@@ -63,78 +63,92 @@
     </div>
 
     <!-- Seção de Cards -->
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">Nossos Serviços</h2>
-        <div class="row">
-            <!-- Card 1 - Educação -->
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <img src="{{ url_for('static', filename='img/imagem1.png') }}" class="card-img-top" alt="Educação Especial">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">
-                            <i class="bi bi-book"></i> Educação Especial
-                        </h5>
-                        <p class="card-text flex-grow-1">
-                            Atendimento pedagógico especializado para crianças e adolescentes autistas, com foco no desenvolvimento da comunicação,
-                             interação social e habilidades acadêmicas, utilizando metodologias individualizadas e ambientes sensoriais acolhedores.
-                        </p>
-                        <a href="#" class="btn btn-primary mt-auto">
-                            <i class="bi bi-info-circle"></i> Detalhes
-                        </a>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Nossos Serviços</h2>
+    
+    <!-- Primeira linha com 3 cards -->
+    <div class="row">
+        <!-- Card 1 - Educação -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='img/imagem1.png') }}" class="card-img-top" alt="Educação Especial">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">
+                        <i class="bi bi-book"></i> Educação Especial
+                    </h5>
+                    <div class="card-text flex-grow-1">
+                        <p>Atendimento pedagógico especializado para crianças e adolescentes autistas, com foco no desenvolvimento da comunicação, interação social e habilidades acadêmicas, utilizando metodologias individualizadas e ambientes sensoriais acolhedores.</p>
                     </div>
+                    <a href="#" class="btn btn-primary mt-auto">
+                        <i class="bi bi-info-circle"></i> Detalhes
+                    </a>
                 </div>
             </div>
-            
-            <!-- Card 2 - Saúde -->
+        </div>
+        
+        <!-- Card 2 - Saúde -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='img/imagem2.png') }}" class="card-img-top" alt="Atendimento de Saúde">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">
+                        <i class="bi bi-heart-pulse"></i> Saúde Integral
+                    </h5>
+                    <div class="card-text flex-grow-1">
+                        <p>Atendimento com equipe multidisciplinar especializada no cuidado de pessoas autistas, oferecendo suporte em áreas como terapia ocupacional, fonoaudiologia, psicologia e fisioterapia, respeitando as particularidades sensoriais e emocionais de cada indivíduo.</p>
+                    </div>
+                    <a href="#" class="btn btn-primary mt-auto">
+                        <i class="bi bi-calendar-check"></i> Agendar
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 3 - Inclusão -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='img/imagem3.png') }}" class="card-img-top" alt="Inclusão Social">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">
+                        <i class="bi bi-people-fill"></i> Inclusão Social
+                    </h5>
+                    <div class="card-text flex-grow-1">
+                        <p>Programas voltados para jovens e adultos autistas, com foco em capacitação profissional, desenvolvimento da autonomia, apoio à empregabilidade e participação ativa em atividades culturais e sociais, promovendo uma sociedade mais inclusiva.</p>
+                    </div>
+                    <a href="#" class="btn btn-primary mt-auto">
+                        <i class="bi bi-telephone"></i> Contatar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Segunda linha com card de agendamento centralizado -->
+    <div class="row mt-3">
+        <div class="col-12 text-center mb-3">
+            <h3>Agende sua consulta</h3>
+        </div>
+        <div class="d-flex justify-content-center">
             <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <img src="{{ url_for('static', filename='img/imagem2.png') }}" class="card-img-top" alt="Atendimento de Saúde">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ url_for('static', filename='img/card01.jpg') }}" class="card-img-top" alt="Agendamento">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">
-                            <i class="bi bi-heart-pulse"></i> Saúde Integral
+                            <i class="bi bi-calendar-plus"></i> Agendamento
                         </h5>
-                        <p class="card-text flex-grow-1">
-                            Atendimento com equipe multidisciplinar especializada no cuidado de pessoas autistas, oferecendo suporte em áreas como terapia ocupacional,
-                             fonoaudiologia, psicologia e fisioterapia, respeitando as particularidades sensoriais e emocionais de cada indivíduo.
-                        </p>
-                        <a href="#" class="btn btn-primary mt-auto">
+                        <div class="card-text flex-grow-1">
+                            <p>Agende uma consulta com nossa equipe especializada. Oferecemos avaliações iniciais, acompanhamento terapêutico e orientações para famílias.</p>
+                        </div>
+                        <a href="{{ url_for('agendamento') }}" class="btn btn-primary mt-auto">
                             <i class="bi bi-calendar-check"></i> Agendar
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Card 3 - Inclusão -->
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <img src="{{ url_for('static', filename='img/imagem3.png') }}" class="card-img-top" alt="Inclusão Social">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">
-                            <i class="bi bi-people-fill"></i> Inclusão Social
-                        </h5>
-                        <p class="card-text flex-grow-1">
-                            Programas voltados para jovens e adultos autistas, com foco em capacitação profissional, desenvolvimento da autonomia, 
-                            apoio à empregabilidade e participação ativa em atividades culturais e sociais, promovendo uma sociedade mais inclusiva.
-                        </p>
-                        <a href="#" class="btn btn-primary mt-auto">
-                            <i class="bi bi-telephone"></i> Contatar
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-<!-- Seção de Vídeo Reduzida -->
-<div class="d-flex justify-content-center">
-    <div class="ratio ratio-16x9 rounded shadow" style="max-width: 600px; width: 100%; overflow: hidden;">
-        <iframe 
-            src="https://www.youtube.com/embed/y-_Ly5Tqggc" 
-            title="Vídeo sobre autismo - Saúde da Infância" 
-            allowfullscreen 
-            style="border: 0;">
-        </iframe>
-    </div>
 </div>
+
 
 
 

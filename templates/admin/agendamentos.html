@@ -1,0 +1,129 @@
+{% extends "admin/base_admin.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4">Gerenciar Agendamentos</h2>
+    
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Solicitações de Agendamento</h6>
+            <div>
+                <select class="form-select form-select-sm" onchange="window.location.href='?status='+this.value">
+                    <option value="pendente" {% if status=='pendente' %}selected{% endif %}>Pendentes</option>
+                    <option value="confirmado" {% if status=='confirmado' %}selected{% endif %}>Confirmados</option>
+                    <option value="cancelado" {% if status=='cancelado' %}selected{% endif %}>Cancelados</option>
+                    <option value="realizado" {% if status=='realizado' %}selected{% endif %}>Realizados</option>
+                    <option value="todos" {% if status=='todos' %}selected{% endif %}>Todos</option>
+                </select>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Contato</th>
+                            <th>Tipo</th>
+                            <th>Preferência</th>
+                            <th>Solicitado em</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for agendamento in agendamentos %}
+                        <tr>
+                            <td>{{ agendamento['nome'] }}</td>
+                            <td>
+                                {{ agendamento['telefone'] }}<br>
+                                <small>{{ agendamento['email'] }}</small>
+                            </td>
+                            <td>{{ agendamento['tipo_consulta'] }}</td>
+                            <td>
+                                {% if agendamento['preferencia_data'] %}
+                                    {{ agendamento['preferencia_data'] }}<br>
+                                    {{ agendamento['preferencia_horario'] }}
+                                {% else %}
+                                    Sem preferência
+                                {% endif %}
+                            </td>
+                            <td>{{ agendamento['data_solicitacao'] }}</td>
+                            <td>
+                                <span class="badge 
+                                    {% if agendamento['status'] == 'pendente' %}bg-warning text-dark
+                                    {% elif agendamento['status'] == 'confirmado' %}bg-success
+                                    {% elif agendamento['status'] == 'cancelado' %}bg-danger
+                                    {% else %}bg-info{% endif %}">
+                                    {{ agendamento['status']|capitalize }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" 
+                                    data-bs-target="#modalAgendamento{{ agendamento['id'] }}">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        
+                        <!-- Modal para edição -->
+                        <div class="modal fade" id="modalAgendamento{{ agendamento['id'] }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Detalhes do Agendamento</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form method="POST" action="{{ url_for('editar_agendamento', id=agendamento['id']) }}">
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <p><strong>Nome:</strong> {{ agendamento['nome'] }}</p>
+                                                <p><strong>Contato:</strong> {{ agendamento['telefone'] }} | {{ agendamento['email'] }}</p>
+                                                <p><strong>Tipo:</strong> {{ agendamento['tipo_consulta'] }}</p>
+                                                <p><strong>Preferência:</strong> 
+                                                    {% if agendamento['preferencia_data'] %}
+                                                        {{ agendamento['preferencia_data'] }} - {{ agendamento['preferencia_horario'] }}
+                                                    {% else %}
+                                                        Sem preferência
+                                                    {% endif %}
+                                                </p>
+                                                <p><strong>Mensagem:</strong> {{ agendamento['mensagem'] or 'Nenhuma mensagem' }}</p>
+                                                
+                                                <hr>
+                                                
+                                                <label for="status" class="form-label">Status</label>
+                                                <select class="form-select" id="status" name="status" required>
+                                                    <option value="pendente" {% if agendamento['status']=='pendente' %}selected{% endif %}>Pendente</option>
+                                                    <option value="confirmado" {% if agendamento['status']=='confirmado' %}selected{% endif %}>Confirmado</option>
+                                                    <option value="cancelado" {% if agendamento['status']=='cancelado' %}selected{% endif %}>Cancelado</option>
+                                                    <option value="realizado" {% if agendamento['status']=='realizado' %}selected{% endif %}>Realizado</option>
+                                                </select>
+                                                
+                                                <div class="mt-3">
+                                                    <label for="responsavel" class="form-label">Responsável</label>
+                                                    <input type="text" class="form-control" id="responsavel" name="responsavel" 
+                                                        value="{{ agendamento['responsavel'] or session['nome_usuario'] }}">
+                                                </div>
+                                                
+                                                <div class="mt-3">
+                                                    <label for="mensagem" class="form-label">Mensagem/Feedback</label>
+                                                    <textarea class="form-control" id="mensagem" name="mensagem" rows="3">{{ agendamento['mensagem'] or '' }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

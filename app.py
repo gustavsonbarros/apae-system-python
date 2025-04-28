@@ -128,9 +128,140 @@ def criar_banco_de_dados():
         FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
     )
     ''')
+
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS agendamentos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        email TEXT NOT NULL,
+        telefone TEXT NOT NULL,
+        tipo_consulta TEXT NOT NULL,
+        preferencia_data TEXT,
+        preferencia_horario TEXT,
+        mensagem TEXT,
+        status TEXT DEFAULT 'pendente',  -- 'pendente', 'confirmado', 'cancelado', 'realizado'
+        data_solicitacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        data_confirmacao TIMESTAMP,
+        responsavel TEXT
+    )
+    ''')
+
+
     
     conn.commit()
     conn.close()
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'tipo_usuario' not in session or session['tipo_usuario'] != 'admin':
+            flash('Acesso restrito a administradores', 'danger')
+            return redirect(url_for('home'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+@app.route('/agendamento', methods=['GET', 'POST'])
+def agendamento():
+    if request.method == 'POST':
+        try:
+            nome = request.form['nome'].strip()
+            email = request.form['email'].strip()
+            telefone = request.form['telefone'].strip()
+            tipo_consulta = request.form['tipo_consulta'].strip()
+            preferencia_data = request.form.get('preferencia_data', '').strip()
+            preferencia_horario = request.form.get('preferencia_horario', '').strip()
+            mensagem = request.form.get('mensagem', '').strip()
+
+            if not nome or not email or not telefone or not tipo_consulta:
+                flash('Por favor, preencha todos os campos obrigatórios', 'danger')
+                return redirect(url_for('agendamento'))
+
+            conn = sqlite3.connect('usuarios.db')
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                INSERT INTO agendamentos 
+                (nome, email, telefone, tipo_consulta, preferencia_data, preferencia_horario, mensagem)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''', (nome, email, telefone, tipo_consulta, preferencia_data, preferencia_horario, mensagem))
+            
+            conn.commit()
+            conn.close()
+
+            flash('Solicitação de agendamento enviada com sucesso! Entraremos em contato em breve.', 'success')
+            return redirect(url_for('home'))
+
+        except Exception as e:
+            flash(f'Erro ao enviar solicitação: {str(e)}', 'danger')
+            return redirect(url_for('agendamento'))
+
+    return render_template('agendamento.html')
+
+@app.route('/admin/agendamentos')
+@admin_required
+def listar_agendamentos():
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    
+    status = request.args.get('status', 'pendente')
+    
+    conn = sqlite3.connect('usuarios.db')
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    
+    query = "SELECT * FROM agendamentos"
+    params = []
+    
+    if status != 'todos':
+        query += " WHERE status = ?"
+        params.append(status)
+    
+    query += " ORDER BY data_solicitacao DESC"
+    cursor.execute(query, params)
+    agendamentos = cursor.fetchall()
+    conn.close()
+    
+    return render_template('admin/agendamentos.html', agendamentos=agendamentos, status=status)
+
+@app.route('/admin/agendamento/<int:id>/editar', methods=['POST'])
+@admin_required
+def editar_agendamento(id):
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    
+    novo_status = request.form['status']
+    responsavel = request.form.get('responsavel', '').strip()
+    mensagem = request.form.get('mensagem', '').strip()
+    
+    try:
+        conn = sqlite3.connect('usuarios.db')
+        cursor = conn.cursor()
+        
+        if novo_status == 'confirmado':
+            cursor.execute('''
+                UPDATE agendamentos 
+                SET status = ?, responsavel = ?, data_confirmacao = CURRENT_TIMESTAMP
+                WHERE id = ?
+            ''', (novo_status, responsavel, id))
+        else:
+            cursor.execute('''
+                UPDATE agendamentos 
+                SET status = ?, responsavel = ?, mensagem = ?
+                WHERE id = ?
+            ''', (novo_status, responsavel, mensagem, id))
+        
+        conn.commit()
+        conn.close()
+        
+        flash('Agendamento atualizado com sucesso!', 'success')
+    except Exception as e:
+        flash(f'Erro ao atualizar agendamento: {str(e)}', 'danger')
+    
+    return redirect(url_for('listar_agendamentos'))
+
+
+
 
 # Rotas de autenticação
 @app.route('/')
@@ -163,15 +294,6 @@ def login():
         return redirect(url_for('home'))
 
     return render_template('login.html')
-
-def admin_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'tipo_usuario' not in session or session['tipo_usuario'] != 'admin':
-            flash('Acesso restrito a administradores', 'danger')
-            return redirect(url_for('home'))
-        return f(*args, **kwargs)
-    return decorated_function
 
 
 @app.route('/esqueci-senha', methods=['GET', 'POST'])

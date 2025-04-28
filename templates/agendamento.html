@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Agendamento de Consulta</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('agendamento') }}">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="nome" class="form-label">Nome Completo *</label>
+                                <input type="text" class="form-control" id="nome" name="nome" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">E-mail *</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="telefone" class="form-label">Telefone *</label>
+                                <input type="tel" class="form-control" id="telefone" name="telefone" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="tipo_consulta" class="form-label">Tipo de Consulta *</label>
+                                <select class="form-select" id="tipo_consulta" name="tipo_consulta" required>
+                                    <option value="" selected disabled>Selecione...</option>
+                                    <option value="Avaliação Inicial">Avaliação Inicial</option>
+                                    <option value="Consulta com Psicólogo">Consulta com Psicólogo</option>
+                                    <option value="Consulta com Fonoaudiólogo">Consulta com Fonoaudiólogo</option>
+                                    <option value="Consulta com Terapeuta Ocupacional">Consulta com Terapeuta Ocupacional</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="preferencia_data" class="form-label">Preferência de Data</label>
+                                <input type="date" class="form-control" id="preferencia_data" name="preferencia_data">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="preferencia_horario" class="form-label">Preferência de Horário</label>
+                                <select class="form-select" id="preferencia_horario" name="preferencia_horario">
+                                    <option value="" selected disabled>Selecione...</option>
+                                    <option value="Manhã (8h-12h)">Manhã (8h-12h)</option>
+                                    <option value="Tarde (13h-17h)">Tarde (13h-17h)</option>
+                                    <option value="Sem preferência">Sem preferência</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="mensagem" class="form-label">Mensagem/Observações</label>
+                            <textarea class="form-control" id="mensagem" name="mensagem" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-light">
+                    <small class="text-muted">* Campos obrigatórios. Entraremos em contato para confirmar o agendamento.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
