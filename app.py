@@ -113,6 +113,22 @@ def criar_banco_de_dados():
         data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     ''')
+    
+    # Criação da tabela feedbacks (nova tabela)
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS feedbacks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        usuario_id INTEGER,
+        usuario_nome TEXT,
+        tipo TEXT NOT NULL,  -- 'erro', 'sugestao', 'melhoria'
+        mensagem TEXT NOT NULL,
+        data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        status TEXT DEFAULT 'pendente',  -- 'pendente', 'visualizado', 'resolvido'
+        resposta TEXT,
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    )
+    ''')
+    
     conn.commit()
     conn.close()
 
@@ -177,6 +193,7 @@ def logout():
     session.pop('tipo_usuario', None)  
     flash('Você saiu do sistema', 'info')
     return redirect(url_for('login'))
+
 
 # Rotas de gerenciamento de usuários
 @app.route('/cadastro', methods=['GET', 'POST'])
@@ -247,6 +264,105 @@ def cadastro():
             return redirect(url_for('cadastro'))
 
     return render_template('cadastro.html')
+
+@app.route('/feedback', methods=['GET', 'POST'])
+def feedback():
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        tipo = request.form.get('tipo')
+        mensagem = request.form.get('mensagem').strip()
+        
+        if not mensagem:
+            flash('Por favor, escreva sua mensagem', 'danger')
+            return redirect(url_for('feedback'))
+        
+        try:
+            conn = sqlite3.connect('usuarios.db')
+            cursor = conn.cursor()
+            
+            # Obter ID do usuário atual
+            cursor.execute("SELECT id FROM usuarios WHERE nome = ?", (session['nome_usuario'],))
+            usuario = cursor.fetchone()
+            usuario_id = usuario[0] if usuario else None
+            
+            cursor.execute('''
+                INSERT INTO feedbacks (usuario_id, usuario_nome, tipo, mensagem)
+                VALUES (?, ?, ?, ?)
+            ''', (usuario_id, session['nome_usuario'], tipo, mensagem))
+            
+            conn.commit()
+            conn.close()
+            
+            flash('Feedback enviado com sucesso! Obrigado pela contribuição.', 'success')
+            return redirect(url_for('home'))
+            
+        except Exception as e:
+            flash(f'Erro ao enviar feedback: {str(e)}', 'danger')
+            return redirect(url_for('feedback'))
+    
+    return render_template('feedback.html')
+
+@app.route('/admin/feedbacks')
+@admin_required
+def listar_feedbacks():
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    
+    status = request.args.get('status', 'pendente')
+    
+    conn = sqlite3.connect('usuarios.db')
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    
+    query = "SELECT * FROM feedbacks"
+    params = []
+    
+    if status != 'todos':
+        query += " WHERE status = ?"
+        params.append(status)
+    
+    query += " ORDER BY data_envio DESC"
+    cursor.execute(query, params)
+    feedbacks = cursor.fetchall()
+    conn.close()
+    
+    return render_template('admin/feedbacks.html', feedbacks=feedbacks, status=status)
+
+@app.route('/admin/feedback/<int:id>/responder', methods=['POST'])
+@admin_required
+def responder_feedback(id):
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    
+    resposta = request.form.get('resposta').strip()
+    novo_status = request.form.get('status')
+    
+    if not resposta:
+        flash('Por favor, escreva uma resposta', 'danger')
+        return redirect(url_for('listar_feedbacks'))
+    
+    try:
+        conn = sqlite3.connect('usuarios.db')
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            UPDATE feedbacks 
+            SET resposta = ?, status = ?
+            WHERE id = ?
+        ''', (resposta, novo_status, id))
+        
+        conn.commit()
+        conn.close()
+        
+        flash('Resposta enviada com sucesso!', 'success')
+        return redirect(url_for('listar_feedbacks'))
+        
+    except Exception as e:
+        flash(f'Erro ao responder feedback: {str(e)}', 'danger')
+        return redirect(url_for('listar_feedbacks'))
+
 
 @app.route('/exportar/usuarios_csv')
 def exportar_usuarios_csv():

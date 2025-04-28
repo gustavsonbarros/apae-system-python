@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="bi bi-chat-square-text-fill"></i> Feedbacks Recebidos
+        </h2>
+        
+        <div class="btn-group">
+            <a href="{{ url_for('listar_feedbacks', status='pendente') }}" 
+               class="btn btn-outline-primary {% if status == 'pendente' %}active{% endif %}">
+                Pendentes
+            </a>
+            <a href="{{ url_for('listar_feedbacks', status='visualizado') }}" 
+               class="btn btn-outline-primary {% if status == 'visualizado' %}active{% endif %}">
+                Visualizados
+            </a>
+            <a href="{{ url_for('listar_feedbacks', status='resolvido') }}" 
+               class="btn btn-outline-primary {% if status == 'resolvido' %}active{% endif %}">
+                Resolvidos
+            </a>
+            <a href="{{ url_for('listar_feedbacks', status='todos') }}" 
+               class="btn btn-outline-primary {% if status == 'todos' %}active{% endif %}">
+                Todos
+            </a>
+        </div>
+    </div>
+    
+    <div class="list-group">
+        {% for feedback in feedbacks %}
+        <div class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">
+                    {% if feedback['tipo'] == 'erro' %}
+                        <span class="badge bg-danger">Erro</span>
+                    {% elif feedback['tipo'] == 'sugestao' %}
+                        <span class="badge bg-info text-dark">Sugestão</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Outro</span>
+                    {% endif %}
+                    {{ feedback['usuario_nome'] }}
+                </h5>
+                <small class="text-muted">{{ feedback['data_envio'] }}</small>
+            </div>
+            <p class="mb-1">{{ feedback['mensagem'] }}</p>
+            <small class="text-muted">Status: 
+                <span class="badge 
+                    {% if feedback['status'] == 'pendente' %}bg-warning text-dark
+                    {% elif feedback['status'] == 'visualizado' %}bg-primary
+                    {% else %}bg-success{% endif %}">
+                    {{ feedback['status'] }}
+                </span>
+            </small>
+            
+            {% if feedback['resposta'] %}
+            <div class="mt-2 p-2 bg-light rounded">
+                <strong>Resposta:</strong>
+                <p>{{ feedback['resposta'] }}</p>
+            </div>
+            {% else %}
+            <form method="POST" action="{{ url_for('responder_feedback', id=feedback['id']) }}" class="mt-3">
+                <div class="mb-2">
+                    <textarea class="form-control" name="resposta" rows="3" placeholder="Digite sua resposta..." required></textarea>
+                </div>
+                <div class="d-flex gap-2">
+                    <select class="form-select" name="status" style="width: auto;">
+                        <option value="visualizado">Marcar como Visualizado</option>
+                        <option value="resolvido">Marcar como Resolvido</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-primary">Responder</button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            Nenhum feedback encontrado com o status selecionado.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
