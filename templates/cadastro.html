@@ -1,431 +1,443 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro - APAE</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-</head>
-<body class="bg-light">
+{% extends "base.html" %}
 
-  <div class="container my-3">
+{% block content %}
+<div class="container my-3">
     <div class="card shadow">
-      <div class="card-header bg-primary text-white">
-        <div class="d-flex justify-content-between align-items-center">
-          <h3 class="mb-0">Cadastro de Usuário</h3>
-          <a href="{{ url_for('home') }}" class="btn btn-sm btn-outline-light">
-            <i class="bi bi-arrow-left"></i> Voltar
-          </a>
-        </div>
-      </div>
-      
-      <div class="card-body">
-        <form method="POST" action="{{ url_for('cadastro') }}" enctype="multipart/form-data">
-
-          <!-- Seções recolhíveis para melhor organização -->
-          <div class="accordion" id="formAccordion">
-            
-            <!-- Informações Pessoais -->
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
-                  <i class="bi bi-person-fill me-2"></i> Informações Pessoais
-                </button>
-              </h2>
-              <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#formAccordion">
-                <div class="accordion-body">
-                  <div class="row g-2">
-                    <div class="col-12">
-                      <label class="form-label">Nome Completo*</label>
-                      <input type="text" name="nome" class="form-control form-control-sm" required>
-                    </div>
-                    <div class="col-12">
-                      <label class="form-label">Nome Social</label>
-                      <input type="text" name="nome_social" class="form-control form-control-sm">
-                    </div>
-                    <div class="col-12 col-md-6">
-                      <label class="form-label">Data de Nascimento</label>
-                      <input type="date" name="data_nascimento" class="form-control form-control-sm">
-                    </div>
-                    <div class="col-12 col-md-6">
-                      <label class="form-label">Sexo</label>
-                      <select name="sexo" class="form-select form-select-sm">
-                        <option value="">Selecione</option>
-                        <option value="masculino">Masculino</option>
-                        <option value="feminino">Feminino</option>
-                        <option value="outro">Outro</option>
-                      </select>
-                    </div>
-
-
-           
-            <div class="col-md-3">
-              <label class="form-label">Ocupação</label>
-              <input type="text" name="ocupacao" class="form-control">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Nº Carteira PCD</label>
-              <input type="text" name="carteira_pcd" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Nº Cartão NIS</label>
-              <input type="text" name="cartao_nis" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Nº Cartão SUS (CRIS)</label>
-              <input type="text" name="cartao_sus" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Raça/Cor</label>
-              <select name="raca_cor" class="form-control">
-                <option value="">Selecione</option>
-                <option value="branca">Branca</option>
-                <option value="preta">Preta</option>
-                <option value="parda">Parda</option>
-                <option value="amarela">Amarela</option>
-                <option value="indigena">Indígena</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Mobilidade</label>
-              <select name="mobilidade" class="form-control">
-                <option value="">Selecione</option>
-                <option value="independente">Independente</option>
-                <option value="cadeirante">Cadeirante</option>
-                <option value="muletas">Muletas</option>
-                <option value="outro">Outro</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Tipo de Deficiência</label>
-              <input type="text" name="tipo_deficiencia" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Transtornos</label>
-              <input type="text" name="transtornos" class="form-control">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">CID 10</label>
-              <input type="text" name="cid10" class="form-control">
-            </div>
-            
-            <div class="col-md-3">
-              <label class="form-label">CID 10 (opcional)</label>
-              <input type="text" name="cid10_opcional2" class="form-control">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">CID 11</label>
-              <input type="text" name="cid11" class="form-control">
-            </div>
-          </div>
-
-          <!-- Área de Atendimento -->
-          <div class="mt-4">
-            <h5>Área de Atendimento</h5>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" name="area[]" value="assistencia">
-              <label class="form-check-label">Assistência</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" name="area[]" value="saude">
-              <label class="form-check-label">Saúde</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" name="area[]" value="educacao">
-              <label class="form-check-label">Educação</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" name="area[]" value="social">
-              <label class="form-check-label">Social</label>
-            </div>
-          </div>
-
-          <!-- Endereço -->
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
-                  <i class="bi bi-house-fill me-2"></i> Endereço
-                </button>
-              </h2>
-              <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
-                <div class="accordion-body">
-                  <div class="row g-2">
-                    <div class="col-12 col-md-4">
-                      <label class="form-label">CEP</label>
-                      <input type="text" name="cep" class="form-control form-control-sm">
-                    </div>
-                    <div class="col-12 col-md-8">
-                      <label class="form-label">Endereço</label>
-                      <input type="text" name="endereco" class="form-control form-control-sm">
-                    </div>
-
-            <div class="col-md-3">
-              <label class="form-label">Número</label>
-              <input type="text" name="numero" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Complemento</label>
-              <input type="text" name="complemento" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Bairro</label>
-              <input type="text" name="bairro" class="form-control">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Cidade</label>
-              <input type="text" name="cidade" class="form-control">
-            </div>
-            <div class="col-md-1">
-              <label class="form-label">UF</label>
-              <input type="text" name="uf" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">E-mail</label>
-              <input type="email" name="email" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Telefone Residencial</label>
-              <input type="text" name="telefone_residencial" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Telefone Recados</label>
-              <input type="text" name="telefone_recados" class="form-control">
-            </div>
-            <div class="col-md-12">
-              <label class="form-label">Pessoa de Contato</label>
-              <input type="text" name="pessoa_contato" class="form-control">
-            </div>
-          </div>
-
-          <!-- Dados dos Responsáveis -->
-          <h5 class="mt-4 mb-3">Dados da Mãe</h5>
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label">Nome da Mãe</label>
-              <input type="text" name="mae_nome" class="form-control">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">CPF</label>
-              <input type="text" name="mae_cpf" class="form-control">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Telefone</label>
-              <input type="text" name="mae_telefone" class="form-control">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">E-mail</label>
-              <input type="email" name="mae_email" class="form-control">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Ocupação</label>
-              <input type="text" name="mae_ocupacao" class="form-control">
-            </div>
-          </div>
-
-          <h5 class="mt-4 mb-3">Dados do Pai</h5>
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label">Nome do Pai</label>
-              <input type="text" name="pai_nome" class="form-control">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">CPF</label>
-              <input type="text" name="pai_cpf" class="form-control">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Telefone</label>
-              <input type="text" name="pai_telefone" class="form-control">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">E-mail</label>
-              <input type="email" name="pai_email" class="form-control">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Ocupação</label>
-              <input type="text" name="pai_ocupacao" class="form-control">
-            </div>
-          </div>
-
-          <!-- Saúde -->
-          <h5 class="mt-4 mb-3">Saúde</h5>
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label">Utiliza Medicamentos?</label><br>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="medicamento" value="sim">
-                <label class="form-check-label">Sim</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="medicamento" value="nao">
-                <label class="form-check-label">Não</label>
-              </div>
-              <div class="mt-2">
-                <label class="form-label">Quais?</label>
-                <textarea name="qual_medicamento" class="form-control"></textarea>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Possui Alergia?</label><br>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="alergia" value="sim">
-                <label class="form-check-label">Sim</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="alergia" value="nao">
-                <label class="form-check-label">Não</label>
-              </div>
-              <div class="mt-2">
-                <label class="form-label">Quais?</label>
-                <textarea name="qual_alergia" class="form-control"></textarea>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Possui Comorbidade?</label><br>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="comorbidade" value="sim">
-                <label class="form-check-label">Sim</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="comorbidade" value="nao">
-                <label class="form-check-label">Não</label>
-              </div>
-              <div class="mt-2">
-                <label class="form-label">Quais?</label>
-                <textarea name="qual_comorbidade" class="form-control"></textarea>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Possui Convênio Médico?</label><br>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="convenio" value="sim">
-                <label class="form-check-label">Sim</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="convenio" value="nao">
-                <label class="form-check-label">Não</label>
-              </div>
-              <div class="mt-2">
-                <label class="form-label">Qual?</label>
-                <textarea name="qual_convenio" class="form-control"></textarea>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Liberado para Atividade Física?</label><br>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="atividade_fisica" value="sim">
-                <label class="form-check-label">Sim</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="atividade_fisica" value="nao">
-                <label class="form-check-label">Não</label>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Data Liberação</label>
-              <input type="date" name="data_liberacao" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Autorização Uso de Imagem</label><br>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="uso_imagem" value="sim">
-                <label class="form-check-label">Sim</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="uso_imagem" value="nao">
-                <label class="form-check-label">Não</label>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Meio de Transporte (Ida)</label>
-              <select name="transporte_ida" class="form-control">
-                <option value="">Selecione</option>
-                <option value="particular">Particular</option>
-                <option value="transporte_escolar">Transporte Escolar</option>
-                <option value="transporte_publico">Transporte Público</option>
-                <option value="outro">Outro</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Meio de Transporte (Volta)</label>
-              <select name="transporte_volta" class="form-control">
-                <option value="">Selecione</option>
-                <option value="particular">Particular</option>
-                <option value="transporte_escolar">Transporte Escolar</option>
-                <option value="transporte_publico">Transporte Público</option>
-                <option value="outro">Outro</option>
-              </select>
-            </div>
-            <div class="col-md-12">
-              <label class="form-label">Anexar Laudo Médico</label>
-              <input type="file" name="laudo" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-              <small class="text-muted">Formatos aceitos: PDF, DOC, DOCX, JPG, PNG (Tamanho máximo: 5MB)</small>
-            </div>
-            <div class="col-md-12">
-              <label class="form-label">Observações</label>
-              <textarea name="observacoes" class="form-control" rows="3"></textarea>
-            </div>
-          </div>
-
-          <!-- Notificações -->
-          <div class="mt-4">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="notificacao_whatsapp" value="sim">
-              <label class="form-check-label">Enviar notificações via WhatsApp</label>
-            </div>
-          </div>
-
-          <!-- Botões -->
-          <div class="fixed-bottom p-3 bg-light border-top">
-            <div class="container">
-              <div class="d-flex justify-content-between">
-                <a href="{{ url_for('home') }}" class="btn btn-secondary btn-sm">
-                  <i class="bi bi-x-lg"></i> Cancelar
+        <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">Cadastro de Usuário</h3>
+                <a href="{{ url_for('home') }}" class="btn btn-sm btn-outline-light">
+                    <i class="bi bi-arrow-left"></i> Voltar
                 </a>
-                <button type="submit" class="btn btn-success btn-sm">
-                  <i class="bi bi-check-lg"></i> Gravar
-                </button>
-
-              </form>
-              </div>
             </div>
-          </div>
-          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
+        </div>
+        
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('cadastro') }}" enctype="multipart/form-data">
+
+                <!-- Seções recolhíveis para melhor organização -->
+                <div class="accordion" id="formAccordion">
+                    
+                    <!-- Informações Pessoais -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                <i class="bi bi-person-fill me-2"></i> Informações Pessoais
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#formAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-2">
+                                    <div class="col-12">
+                                        <label class="form-label">Nome Completo*</label>
+                                        <input type="text" name="nome" class="form-control form-control-sm" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Nome Social</label>
+                                        <input type="text" name="nome_social" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label class="form-label">Data de Nascimento</label>
+                                        <input type="date" name="data_nascimento" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label class="form-label">Sexo</label>
+                                        <select name="sexo" class="form-select form-select-sm">
+                                            <option value="">Selecione</option>
+                                            <option value="masculino">Masculino</option>
+                                            <option value="feminino">Feminino</option>
+                                            <option value="outro">Outro</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label class="form-label">Ocupação</label>
+                                        <input type="text" name="ocupacao" class="form-control">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Nº Carteira PCD</label>
+                                        <input type="text" name="carteira_pcd" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Nº Cartão NIS</label>
+                                        <input type="text" name="cartao_nis" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Nº Cartão SUS (CRIS)</label>
+                                        <input type="text" name="cartao_sus" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Raça/Cor</label>
+                                        <select name="raca_cor" class="form-control">
+                                            <option value="">Selecione</option>
+                                            <option value="branca">Branca</option>
+                                            <option value="preta">Preta</option>
+                                            <option value="parda">Parda</option>
+                                            <option value="amarela">Amarela</option>
+                                            <option value="indigena">Indígena</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Mobilidade</label>
+                                        <select name="mobilidade" class="form-control">
+                                            <option value="">Selecione</option>
+                                            <option value="independente">Independente</option>
+                                            <option value="cadeirante">Cadeirante</option>
+                                            <option value="muletas">Muletas</option>
+                                            <option value="outro">Outro</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Tipo de Deficiência</label>
+                                        <input type="text" name="tipo_deficiencia" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Transtornos</label>
+                                        <input type="text" name="transtornos" class="form-control">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">CID 10</label>
+                                        <input type="text" name="cid10" class="form-control">
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        <label class="form-label">CID 10 (opcional)</label>
+                                        <input type="text" name="cid10_opcional2" class="form-control">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">CID 11</label>
+                                        <input type="text" name="cid11" class="form-control">
+                                    </div>
+                                </div>
+
+                                <!-- Área de Atendimento -->
+                                <div class="mt-4">
+                                    <h5>Área de Atendimento</h5>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="area[]" value="assistencia">
+                                        <label class="form-check-label">Assistência</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="area[]" value="saude">
+                                        <label class="form-check-label">Saúde</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="area[]" value="educacao">
+                                        <label class="form-check-label">Educação</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="area[]" value="social">
+                                        <label class="form-check-label">Social</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Endereço -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                <i class="bi bi-house-fill me-2"></i> Endereço
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-2">
+                                    <div class="col-12 col-md-4">
+                                        <label class="form-label">CEP</label>
+                                        <input type="text" name="cep" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-12 col-md-8">
+                                        <label class="form-label">Endereço</label>
+                                        <input type="text" name="endereco" class="form-control form-control-sm">
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label class="form-label">Número</label>
+                                        <input type="text" name="numero" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Complemento</label>
+                                        <input type="text" name="complemento" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Bairro</label>
+                                        <input type="text" name="bairro" class="form-control">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Cidade</label>
+                                        <input type="text" name="cidade" class="form-control">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label class="form-label">UF</label>
+                                        <input type="text" name="uf" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">E-mail</label>
+                                        <input type="email" name="email" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Telefone Residencial</label>
+                                        <input type="text" name="telefone_residencial" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Telefone Recados</label>
+                                        <input type="text" name="telefone_recados" class="form-control">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label">Pessoa de Contato</label>
+                                        <input type="text" name="pessoa_contato" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dados dos Responsáveis -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                <i class="bi bi-people-fill me-2"></i> Dados dos Responsáveis
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                            <div class="accordion-body">
+                                <h5 class="mb-3">Dados da Mãe</h5>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nome da Mãe</label>
+                                        <input type="text" name="mae_nome" class="form-control">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">CPF</label>
+                                        <input type="text" name="mae_cpf" class="form-control">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Telefone</label>
+                                        <input type="text" name="mae_telefone" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">E-mail</label>
+                                        <input type="email" name="mae_email" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Ocupação</label>
+                                        <input type="text" name="mae_ocupacao" class="form-control">
+                                    </div>
+                                </div>
+
+                                <h5 class="mt-4 mb-3">Dados do Pai</h5>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nome do Pai</label>
+                                        <input type="text" name="pai_nome" class="form-control">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">CPF</label>
+                                        <input type="text" name="pai_cpf" class="form-control">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Telefone</label>
+                                        <input type="text" name="pai_telefone" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">E-mail</label>
+                                        <input type="email" name="pai_email" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Ocupação</label>
+                                        <input type="text" name="pai_ocupacao" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Saúde -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                                <i class="bi bi-heart-pulse me-2"></i> Saúde
+                            </button>
+                        </h2>
+                        
+                        <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Utiliza Medicamentos?</label><br>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="medicamento" value="sim">
+                                            <label class="form-check-label">Sim</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="medicamento" value="nao">
+                                            <label class="form-check-label">Não</label>
+                                        </div>
+                                        <div class="mt-2">
+                                            <label class="form-label">Quais?</label>
+                                            <textarea name="qual_medicamento" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Possui Alergia?</label><br>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="alergia" value="sim">
+                                            <label class="form-check-label">Sim</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="alergia" value="nao">
+                                            <label class="form-check-label">Não</label>
+                                        </div>
+                                        <div class="mt-2">
+                                            <label class="form-label">Quais?</label>
+                                            <textarea name="qual_alergia" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Possui Comorbidade?</label><br>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="comorbidade" value="sim">
+                                            <label class="form-check-label">Sim</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="comorbidade" value="nao">
+                                            <label class="form-check-label">Não</label>
+                                        </div>
+                                        <div class="mt-2">
+                                            <label class="form-label">Quais?</label>
+                                            <textarea name="qual_comorbidade" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Possui Convênio Médico?</label><br>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="convenio" value="sim">
+                                            <label class="form-check-label">Sim</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="convenio" value="nao">
+                                            <label class="form-check-label">Não</label>
+                                        </div>
+                                        <div class="mt-2">
+                                            <label class="form-label">Qual?</label>
+                                            <textarea name="qual_convenio" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Liberado para Atividade Física?</label><br>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="atividade_fisica" value="sim">
+                                            <label class="form-check-label">Sim</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="atividade_fisica" value="nao">
+                                            <label class="form-check-label">Não</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Data Liberação</label>
+                                        <input type="date" name="data_liberacao" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Autorização Uso de Imagem</label><br>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="uso_imagem" value="sim">
+                                            <label class="form-check-label">Sim</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="uso_imagem" value="nao">
+                                            <label class="form-check-label">Não</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Meio de Transporte (Ida)</label>
+                                        <select name="transporte_ida" class="form-control">
+                                            <option value="">Selecione</option>
+                                            <option value="particular">Particular</option>
+                                            <option value="transporte_escolar">Transporte Escolar</option>
+                                            <option value="transporte_publico">Transporte Público</option>
+                                            <option value="outro">Outro</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Meio de Transporte (Volta)</label>
+                                        <select name="transporte_volta" class="form-control">
+                                            <option value="">Selecione</option>
+                                            <option value="particular">Particular</option>
+                                            <option value="transporte_escolar">Transporte Escolar</option>
+                                            <option value="transporte_publico">Transporte Público</option>
+                                            <option value="outro">Outro</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label">Anexar Laudo Médico</label>
+                                        <input type="file" name="laudo" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                                        <small class="text-muted">Formatos aceitos: PDF, DOC, DOCX, JPG, PNG (Tamanho máximo: 5MB)</small>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label">Observações</label>
+                                        <textarea name="observacoes" class="form-control" rows="3"></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Notificações -->
+                                <div class="mt-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="notificacao_whatsapp" value="sim">
+                                        <label class="form-check-label">Enviar notificações via WhatsApp</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botões -->
+                <!-- Botões Simplificados -->
+                <div class="mt-4 pt-3 border-top">
+                  <div class="d-flex justify-content-end gap-2">
+                      <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+                          <i class="bi bi-x-lg"></i> Cancelar
+                      </a>
+                      <button type="submit" class="btn btn-primary">
+                          <i class="bi bi-check-lg"></i> Gravar
+                      </button>
+                  </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
     // Exemplo de máscara para campos como CPF e telefone
     document.addEventListener('DOMContentLoaded', function() {
-      // Máscara para CPF
-      const cpfFields = document.querySelectorAll('input[name="cpf"], input[name="mae_cpf"], input[name="pai_cpf"]');
-      cpfFields.forEach(field => {
-        field.addEventListener('input', function(e) {
-          let value = e.target.value.replace(/\D/g, '');
-          if (value.length > 3) value = value.replace(/^(\d{3})(\d)/g, '$1.$2');
-          if (value.length > 6) value = value.replace(/^(\d{3})\.(\d{3})(\d)/g, '$1.$2.$3');
-          if (value.length > 9) value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/g, '$1.$2.$3-$4');
-          e.target.value = value.substring(0, 14);
+        // Máscara para CPF
+        const cpfFields = document.querySelectorAll('input[name="cpf"], input[name="mae_cpf"], input[name="pai_cpf"]');
+        cpfFields.forEach(field => {
+            field.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 3) value = value.replace(/^(\d{3})(\d)/g, '$1.$2');
+                if (value.length > 6) value = value.replace(/^(\d{3})\.(\d{3})(\d)/g, '$1.$2.$3');
+                if (value.length > 9) value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/g, '$1.$2.$3-$4');
+                e.target.value = value.substring(0, 14);
+            });
         });
-      });
 
-      // Máscara para telefone
-      const telFields = document.querySelectorAll('input[type="text"][name*="telefone"]');
-      telFields.forEach(field => {
-        field.addEventListener('input', function(e) {
-          let value = e.target.value.replace(/\D/g, '');
-          if (value.length > 0) value = '(' + value;
-          if (value.length > 3) value = value.substring(0, 3) + ') ' + value.substring(3);
-          if (value.length > 10) value = value.substring(0, 10) + '-' + value.substring(10);
-          e.target.value = value.substring(0, 15);
+        // Máscara para telefone
+        const telFields = document.querySelectorAll('input[type="text"][name*="telefone"]');
+        telFields.forEach(field => {
+            field.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 0) value = '(' + value;
+                if (value.length > 3) value = value.substring(0, 3) + ') ' + value.substring(3);
+                if (value.length > 10) value = value.substring(0, 10) + '-' + value.substring(10);
+                e.target.value = value.substring(0, 15);
+            });
         });
-      });
     });
-  </script>
-
-       
-
-      </div>
-    </div>
-  </div>
-
-</body>
-</html>
+</script>
+{% endblock %}
