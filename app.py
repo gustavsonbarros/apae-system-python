@@ -151,6 +151,18 @@ def criar_banco_de_dados():
     conn.commit()
     conn.close()
 
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'usuario' not in session:
+            flash('Por favor, faça login para acessar esta página', 'danger')
+            return redirect(url_for('login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -162,6 +174,7 @@ def admin_required(f):
 
 
 @app.route('/agendamento', methods=['GET', 'POST'])
+@login_required
 def agendamento():
     if request.method == 'POST':
         try:
@@ -266,8 +279,14 @@ def editar_agendamento(id):
 # Rotas de autenticação
 @app.route('/')
 def home():
-    # Página pública - não requer login
-    return render_template('index.html')
+    if 'usuario' in session:
+        
+        return render_template('index.html')
+    else:
+        
+        return render_template('index.html')  
+        
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -318,6 +337,7 @@ def logout():
 
 # Rotas de gerenciamento de usuários
 @app.route('/cadastro', methods=['GET', 'POST'])
+@login_required
 def cadastro():
     if 'usuario' not in session:
         return redirect(url_for('login'))
@@ -363,8 +383,8 @@ def cadastro():
                 'observacoes', 'notificacao_whatsapp', 'laudo_nome', 'laudo_caminho'
             ]
 
-            valores = [dados_limpos.get(campo, '') for campo in campos[:-2]]  # Todos exceto os 2 últimos
-            valores.extend([laudo_nome, laudo_caminho])  # Adiciona dados do laudo
+            valores = [dados_limpos.get(campo, '') for campo in campos[:-2]]  
+            valores.extend([laudo_nome, laudo_caminho]) 
 
             conn = sqlite3.connect('usuarios.db')
             cursor = conn.cursor()
@@ -403,15 +423,16 @@ def feedback():
             conn = sqlite3.connect('usuarios.db')
             cursor = conn.cursor()
             
-            # Obter ID do usuário atual
+            # Tenta buscar o ID do usuário pelo nome
             cursor.execute("SELECT id FROM usuarios WHERE nome = ?", (session['nome_usuario'],))
             usuario = cursor.fetchone()
             usuario_id = usuario[0] if usuario else None
             
+            # Usa session['usuario'] como nome real do usuário (admin ou funcionario)
             cursor.execute('''
                 INSERT INTO feedbacks (usuario_id, usuario_nome, tipo, mensagem)
                 VALUES (?, ?, ?, ?)
-            ''', (usuario_id, session['nome_usuario'], tipo, mensagem))
+            ''', (usuario_id if usuario_id else None, session['usuario'], tipo, mensagem))
             
             conn.commit()
             conn.close()
@@ -424,6 +445,7 @@ def feedback():
             return redirect(url_for('feedback'))
     
     return render_template('feedback.html')
+
 
 
 @app.route('/admin/feedback/<int:id>/excluir', methods=['POST'])
@@ -474,7 +496,9 @@ def listar_feedbacks():
     feedbacks = cursor.fetchall()
     conn.close()
     
+    # CORREÇÃO: caminho completo do template
     return render_template('admin/feedbacks.html', feedbacks=feedbacks, status=status)
+
 
 @app.route('/admin/feedback/<int:id>/responder', methods=['POST'])
 @admin_required
@@ -527,14 +551,14 @@ def exportar_usuarios_csv():
     colunas = [desc[0] for desc in cursor.description]
     conn.close()
 
-    # Criar arquivo CSV em memória
+    
     output = StringIO()
     writer = csv.writer(output)
     
-    # Escrever cabeçalho
+    
     writer.writerow(colunas)
     
-    # Escrever dados
+    
     writer.writerows(usuarios)
     
     # Configurar resposta
@@ -558,7 +582,7 @@ def editar_usuario(id):
 
     if request.method == 'POST':
         try:
-            # Processar upload do laudo (se houver novo arquivo)
+            
             laudo_nome = ''
             laudo_caminho = ''
             
@@ -596,14 +620,14 @@ def editar_usuario(id):
                 'observacoes', 'notificacao_whatsapp'
             ]
 
-            # Se um novo laudo foi enviado, atualiza esses campos também
+            
             if laudo_nome and laudo_caminho:
                 campos.extend(['laudo_nome', 'laudo_caminho'])
 
             set_clause = ', '.join([f"{campo} = ?" for campo in campos])
             valores = [dados_limpos.get(campo, '') for campo in campos]
             
-            # Se um novo laudo foi enviado, adiciona esses valores
+            
             if laudo_nome and laudo_caminho:
                 valores.extend([laudo_nome, laudo_caminho])
             
