@@ -21,10 +21,10 @@ MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = MAX_FILE_SIZE
 
-# Substitua o dicionário atual de usuários por:
+
 usuarios = {
     'admin': {
-        'senha': 'senha123',  # Lembre-se de usar hash na senha em produção
+        'senha': 'senha123', 
         'tipo': 'admin'
     },
     'funcionario': {
